@@ -2,9 +2,9 @@
 Notes: (some can vaguely relate to processes but to linux)
 +Memory mapping : In linux kernel it is possible to map kernel address space to a user address space. This eliminates the overhead of copying user space information into the kernel space and vice versa. This can be done through a device driver and the user space device interface (/dev).
 The basic unit for virtual memory manageemnt is a page, which size is usually 4K, Whenever we work with virtual memory we work with two types of addresses (virtual and physical). All CUP access (including from KERNEL space) uses virtual addresses that are translated by the MMU into physical addresses with the help of page tables. (Private virtyal memory address space managed by process) 
-<img src="mmu.png">
+<img src="learning_materials/mmu.png">
 +Page tables : 
-<img src="page.png">
+<img src="learning_materials/page.png">
 +MMU : (memory management unit) is used to translate virtual addresses into physical ones, is there mmu in each abstraction level? 
 +memory metadata : 
 +inodes : (index node) is a data structure that describes the objects of file systems, which includes files and directories. An inode contians a record of file and directory location in the file system, their names, owner account, and persmissions. This information is called metadata and is significant for the inenr functioning of the Linux operating system.
@@ -40,8 +40,8 @@ Processes are organized hierarchically, each process has a parent process which 
 ------------------------------------------------------------------------------------------------------------------------------
 
 Project: 
-Allowed function: 
--perror: prints a descriptive eror message to stderr
+Allowed function: <br>
+-perror: prints a descriptive eror message to stderr <br>
 -strerror:accepts an error number argument ernum and returns a pointer to the corresponding message string <br>
 -access: <br>
 -dup: <br>
