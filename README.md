@@ -30,13 +30,14 @@ Parts: (from the GNU C library documentation)
 ------------------------------
 
 1-UNIX processes in C: 
-
+<p>
 Processes are the primitive units for allocation of system resources. each process has its own address space and usually one thread of control. A process executes a program; you can have multiple processes executing the same program, but each process has its own copy of the program within its own address space and executes it independently of the other copies.
 Processes are organized hierarchically, each process has a parent process which explicitly arranged to create it. The process created by a given parent are called child processes. A child inherits many of its attributes from the parent process.
 +How can a program create a child process.
 +How can a program terminate a child process.
 +How can a program control a child process.
 	-Process creation concept: A new process is created when one of the functions (posix_spawn, fork, _fork, vfork) is called
+</p>
 ------------------------------------------------------------------------------------------------------------------------------
 
 Project: 
