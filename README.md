@@ -4,7 +4,7 @@ Notes: (some can vaguely relate to processes but to linux)
 The basic unit for virtual memory manageemnt is a page, which size is usually 4K, Whenever we work with virtual memory we work with two types of addresses (virtual and physical). All CUP access (including from KERNEL space) uses virtual addresses that are translated by the MMU into physical addresses with the help of page tables. (Private virtyal memory address space managed by process) 
 <img src="learning_materials/mmu.png">
 +Page tables : 
-<img src="learning_materials/page.png">
+<img src="./learning_materials/page.png">
 +MMU : (memory management unit) is used to translate virtual addresses into physical ones, is there mmu in each abstraction level? 
 +memory metadata : 
 +inodes : (index node) is a data structure that describes the objects of file systems, which includes files and directories. An inode contians a record of file and directory location in the file system, their names, owner account, and persmissions. This information is called metadata and is significant for the inenr functioning of the Linux operating system.
