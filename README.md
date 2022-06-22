@@ -42,12 +42,12 @@ Processes are organized hierarchically, each process has a parent process which 
 
 Project: 
 Allowed function: <br>
--perror: prints a descriptive eror message to stderr <br>
--strerror:accepts an error number argument ernum and returns a pointer to the corresponding message string <br>
--access: <br>
--dup: <br>
--dup2: <br>
--execve: <br>
+-perror: (void perror (const char *str)), prints a descriptive eror message to stderr <br>
+-strerror: (char *strerror(int errnum)), accepts an error number argument ernum and returns a pointer to the corresponding message string <br>
+-access: (int access(const char *path, int amode)), checks if the process has the rights to access the file from the path, using some arguments (F_OK: file exists, R_OK: can be accessed for reading, W_OK: can be accessed for writing, X_OK: can be accessed for execution) <br>
+-dup: (int dup(int oldfd)), creates a copy of the file descriptor (uses the lowest numbered unused descriptor for fd)<br>
+-dup2: (int dup2(int oldfd, int newfd)), similar to dup but instead of giving the lowest available descriptor it uses the descriptor number specified by the user<br>
+-execve: int execve(const char *file, char *const argv[], char *const envp[]), transforms the calling process into a new process. <br>
 -fork: <br>
 -pipe: <br>
 -unlink: <br>
