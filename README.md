@@ -47,7 +47,7 @@ Allowed function: <br>
 -access: (int access(const char *path, int amode)), checks if the process has the rights to access the file from the path, using some arguments (F_OK: file exists, R_OK: can be accessed for reading, W_OK: can be accessed for writing, X_OK: can be accessed for execution) <br>
 -dup: (int dup(int oldfd)), creates a copy of the file descriptor (uses the lowest numbered unused descriptor for fd)<br>
 -dup2: (int dup2(int oldfd, int newfd)), similar to dup but instead of giving the lowest available descriptor it uses the descriptor number specified by the user<br>
--execve: int execve(const char *file, char *const argv[], char *const envp[]), transforms the calling process into a new process(ends the current program but not process and start a new one. Ofc the process still has the same PID). <a href="https://www.youtube.com/watch?v=iq7puCxsgHQ">check this video</a><br>
+-execve: int execve(const char *file, char *const argv[], char *const envp[]), transforms the calling process into a new process(ends the current program but not process and start a new one. Ofc the process still has the same PID). <a href="https://www.youtube.com/watch?v=iq7puCxsgHQ" target="_blank">check this video</a><br>
 -fork: <br>
 -pipe: <br>
 -unlink: <br>
