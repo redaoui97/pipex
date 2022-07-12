@@ -50,6 +50,6 @@ Allowed function: <br>
 -execve: int execve(const char *file, char *const argv[], char *const envp[]), transforms the calling process into a new process(ends the current program but not process and start a new one. Ofc the process still has the same PID). <a href="https://www.youtube.com/watch?v=iq7puCxsgHQ" target="_blank">check this video</a><br>
 -fork: (pid_t fork(void)), Creates a new process called child process, that runs concurrently with the parent process (current or calling process). After the call of the fork function both processes will executed the following instructions<br>
 -pipe: (int pipe(int pipefd[2])) : creates a pipe (a way to connect the output of one program to the input of another one without use of temporary files) <br> 
--unlink: <br>
+-unlink:   <br>
 -wait: <br>
 -waitpid: <br>
