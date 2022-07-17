@@ -21,6 +21,7 @@ Inode contents:
 </ul>
 +tty : virtual tty (teletypewriter) is a subsystem in Linux that makes process management, line editing and session management possible at the kernel level through tty drivers. The interaction between the tty and shell is called pseudo-tty
 ext4 filesystem: Linux file system originally made for Minix OS
++linking: there are two types of links (soft links, hard links) to a file. a soft link(symbolic link) acts as a pointer or a reference to the file name, as it doesn't access the data in the original file. a hard link acts as a copy of the original file
 
 ************************************************************************************************************************************************************************************************************************************************************
 Parts: (from the GNU C library documentation)
@@ -50,6 +51,6 @@ Allowed function: <br>
 -execve: int execve(const char *file, char *const argv[], char *const envp[]), transforms the calling process into a new process(ends the current program but not process and start a new one. Ofc the process still has the same PID). <a href="https://www.youtube.com/watch?v=iq7puCxsgHQ" target="_blank">check this video</a><br>
 -fork: (pid_t fork(void)), Creates a new process called child process, that runs concurrently with the parent process (current or calling process). After the call of the fork function both processes will executed the following instructions<br>
 -pipe: (int pipe(int pipefd[2])) : creates a pipe (a way to connect the output of one program to the input of another one without use of temporary files) <br> 
--unlink:   <br>
--wait: <br>
--waitpid: <br>
+-unlink: (int unlink(const char *pathname)) : deletes a name fromthe filesystem. if that name was last likn to a file and no processs have the file open, the file is deleted and the sapce it was using is made available for reuse <br>
+-wait: (pid_t wait(int *wstatus)) : blocks the calling process until one of its child processes exits or a signal to terminatex is received.<br>
+-waitpid (pid_t waitpid(pid_t pid, int *wstatus, int options)): <br>
