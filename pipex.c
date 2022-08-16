@@ -10,5 +10,12 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "includes/pipex.h"
 
+int main(int argc, char *argv[], char **envp)
+{
+    char *options[3] = {"cat", "pipex.c", NULL};
+
+    execve("/bin/cat", options, envp);
+    return 0;
+}
