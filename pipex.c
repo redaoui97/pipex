@@ -12,10 +12,28 @@
 
 #include "includes/pipex.h"
 
-int main(int argc, char *argv[], char **envp)
+/*Main code, executes major instructions*/
+int	main(int argc, char *argv[], char **envp)
 {
-    char *options[3] = {"cat", "pipex.c", NULL};
+	char 	*options[] = {"ls", NULL};
+	char	*path;
+	pid_t	pid;
 
-    execve("/bin/cat", options, envp);
-    return 0;
+	ft_printf("Hello\n");
+	pid = fork();
+	//this part below is executed by both the child and the parent
+
+	if (pid == -1)
+		error("Error forking!");
+
+	if (pid == 0)
+	{
+		execve("/bin/ls", options, envp);
+	}
+	else
+	{
+		ft_printf("This is the parent whose pid : %d talking!\n", (int)pid);
+		usleep(10000000);
+	}
+	return (0);
 }
