@@ -37,6 +37,7 @@ int	main(int argc, char *argv[], char **envp)
 {
 	char 	*options[] = {"ls", NULL};
 	char	*path;
+	int		pipe_fd[2];
 	pid_t	pid;
 
 	if (argc == 5)
@@ -48,6 +49,8 @@ int	main(int argc, char *argv[], char **envp)
 		{
 			/*Here we execute the first part and store the output in the pipe*/
 			first_part(argv[1], argv[2], envp);
+			if(pipe(pipe_fd) == -1)
+				error("Pipe creating error occured!");
 		}
 		else
 		{
