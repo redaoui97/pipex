@@ -31,6 +31,12 @@ int			print_nbr_unsigned(unsigned int n);
 int			print_nbr(int n);
 int			print_str(char *str);
 
+/*Main functions*/
+
+
 /*Src functions*/
 void		error(char *error_message);
+char        *get_path(char *real_path);
+char        *ft_strdup(const char *s1);
+
 #endif
