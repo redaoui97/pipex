@@ -12,7 +12,7 @@
 
 #include "includes/pipex.h"
 
-/*Executes the first command and send the result to the input side of pipe*/
+/*Executes the first command and sends the result to the input side of pipe*/
 static void	first_part(char *cmd, char *option, char **envp)
 {
 	char	*path;
@@ -59,11 +59,13 @@ int	main(int argc, char *argv[], char **envp)
 			/*This is the parent's part, it needs to wait for the child to finish and then execute the second part*/
 			/*I need to wait for the child processes before executing the second part*/
 			ft_printf("This is the parent whose pid : %d talking!\n", (int)pid);
-			usleep(10000000);
+			/*Wait for the first process*/
+			second_part();
 		}
 	}
 	else
 		error("Invalid arguments!");
+	/*Wait for the second process*/
 	return (0);
 }
 
