@@ -28,6 +28,7 @@ Parts: (from the GNU C library documentation)
 1-Unix processes in C
 2-Threads
 3-Pipes ad FIFOs
+4-Redirection
 ------------------------------
 
 1-UNIX processes in C: 
@@ -39,18 +40,46 @@ Processes are organized hierarchically, each process has a parent process which 
 +How can a program control a child process.
 	-Process creation concept: A new process is created when one of the functions (posix_spawn, fork, _fork, vfork) is called
 </p>
+3-Pipes and FIFOs:
+A pipe is a mechanism for interprocess communication; data written to the pipe by one process can be read by another process. The data is handled in a first-in first-out (FIFO) order. The pipe has no name; it is create for noe use and both ends must be inhereted from the single process which created the pipe.<br>
+A FIFO special file is similar to a pipe, but instad of being anonymous, temporary connection, a FIFO has a name. Processes open the FIFO by name in order to communicate through it.<br>
+4-Stream Redirection:
+Before the C shell executed a command, it scans the command line for redirection characters. These special notations direct the shell to redirect input and output.<br>
+Overwrite : > (standard output) | < (standard input) | 2> (standard error)<br>
+Append	  : >> (standard output) | << (standard input) | 2>> (standard error)<br>
+You can redirect the standard input and output of a command with the following statements:<br>
+<ul>
+	<li>< File: Opens the File as the standard input</li>
+	<li><< Word: (HEREDOC) Reads the shell input up to the line that matches the value of the Word variable. The result text is placed in an anonymous temporary file, which is given to the command as standard input.</li>
+	<li>> File: Uses the specified File as tandard output, if File doesn't exist, it is created, otherwise it gets truncated and its previous content is lose</li>
+	<li>>!File: Uses the specified File as tandard output. the ! is used to suppress the noclobber option that disables file truncation with > </li>
+	<li>>& File: Uses the specified File as tandard output. The & redirects both stdout and stderr to the specified file</li>
+	<li>>&! File: combination of >& File and >! File</li>
+</ul>
 ------------------------------------------------------------------------------------------------------------------------------
-
 Project: 
 Allowed function: <br>
 -perror: (void perror (const char *str)), prints a descriptive eror message to stderr <br>
+-----------------------------------------------------<br>
 -strerror: (char *strerror(int errnum)), accepts an error number argument ernum and returns a pointer to the corresponding message string <br>
+-----------------------------------------------------<br>
 -access: (int access(const char *path, int amode)), checks if the process has the rights to access the file from the path, using some arguments (F_OK: file exists, R_OK: can be accessed for reading, W_OK: can be accessed for writing, X_OK: can be accessed for execution) <br>
+-----------------------------------------------------<br>
 -dup: (int dup(int oldfd)), creates a copy of the file descriptor (uses the lowest numbered unused descriptor for fd)<br>
+-----------------------------------------------------<br>
 -dup2: (int dup2(int oldfd, int newfd)), similar to dup but instead of giving the lowest available descriptor it uses the descriptor number specified by the user<br>
+-----------------------------------------------------<br>
 -execve: int execve(const char *file, char *const argv[], char *const envp[]), transforms the calling process into a new process(ends the current program but not process and start a new one. Ofc the process still has the same PID). <a href="https://www.youtube.com/watch?v=iq7puCxsgHQ" target="_blank">check this video</a><br>
+-----------------------------------------------------<br>
 -fork: (pid_t fork(void)), Creates a new process called child process, that runs concurrently with the parent process (current or calling process). After the call of the fork function both processes will executed the following instructions<br>
+-----------------------------------------------------<br>
 -pipe: (int pipe(int pipefd[2])) : creates a pipe (a way to connect the output of one program to the input of another one without use of temporary files) <br> 
+-----------------------------------------------------<br>
 -unlink: (int unlink(const char *pathname)) : deletes a name fromthe filesystem. if that name was last likn to a file and no processs have the file open, the file is deleted and the sapce it was using is made available for reuse <br>
+-----------------------------------------------------<br>
 -wait: (pid_t wait(int *wstatus)) : blocks the calling process until one of its child processes exits or a signal to terminatex is received.<br>
--waitpid (pid_t waitpid(pid_t pid, int *wstatus, int options)): <br>
+-----------------------------------------------------<br>
+-waitpid (pid_t waitpid(pid_t pid, int *wstatus, int options)): Parent process waits for the child process to finish<br>
+----------------------------------------------------------------------<br>
+----------------------------------------------------------------------<br>
+Pipes: 
