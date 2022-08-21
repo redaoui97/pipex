@@ -16,6 +16,7 @@ int	parsing(char **argv, char **paths, char **args1, char **args2, char **envp)
 {
 	//parse infile
 		//check if file exists in the current directory and can be accessed
+	if (access(argv[1], ))
 	//parse first command and its parameters
 		//split the string and get the command and it's parameters 
 		//find the command from the envp $PATH variable 
