@@ -24,14 +24,14 @@ ext4 filesystem: Linux file system originally made for Minix OS
 +linking: there are two types of links (soft links, hard links) to a file. a soft link(symbolic link) acts as a pointer or a reference to the file name, as it doesn't access the data in the original file. a hard link acts as a copy of the original file
 
 ************************************************************************************************************************************************************************************************************************************************************
-Parts: (from the GNU C library documentation)
-1-Unix processes in C <br>
-2-Threads<br>
-3-Pipes ad FIFOs<br>
-4-Redirection<br>
+Parts: (from the GNU C library documentation)<br>
+<a href="#processes">1-Unix processes in C</a><br>
+<a href="#threads">2-Threads</a><br>
+<a href="#pipes">3-Pipes ad FIFOs</a><br>
+<a href="#redirection">4-Redirection</a><br>
 ------------------------------
 
-<h4>1-UNIX processes in C: </h4>
+<h4 id="processes">1-UNIX processes in C: </h4>
 <p>
 Processes are the primitive units for allocation of system resources. each process has its own address space and usually one thread of control. A process executes a program; you can have multiple processes executing the same program, but each process has its own copy of the program within its own address space and executes it independently of the other copies.
 Processes are organized hierarchically, each process has a parent process which explicitly arranged to create it. The process created by a given parent are called child processes. A child inherits many of its attributes from the parent process.
@@ -40,10 +40,10 @@ Processes are organized hierarchically, each process has a parent process which 
 +How can a program control a child process.
 	-Process creation concept: A new process is created when one of the functions (posix_spawn, fork, _fork, vfork) is called
 </p>
-<h4>3-Pipes and FIFOs: </h4>
+<h4 id="pipes">3-Pipes and FIFOs: </h4>
 A pipe is a mechanism for interprocess communication; data written to the pipe by one process can be read by another process. The data is handled in a first-in first-out (FIFO) order. The pipe has no name; it is create for noe use and both ends must be inhereted from the single process which created the pipe.<br>
 A FIFO special file is similar to a pipe, but instad of being anonymous, temporary connection, a FIFO has a name. Processes open the FIFO by name in order to communicate through it.<br>
-<h4>4-Stream Redirection:</h4>
+<h4 id="redirection">4-Stream Redirection:</h4>
 Before the C shell executed a command, it scans the command line for redirection characters. These special notations direct the shell to redirect input and output.<br>
 Overwrite : > (standard output) | < (standard input) | 2> (standard error)<br>
 Append	  : >> (standard output) | << (standard input) | 2>> (standard error)<br>
