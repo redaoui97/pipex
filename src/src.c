@@ -17,9 +17,13 @@
 /*prints an error message before quitting the program*/
 void	error(char *error_message)
 {
+	char	*msg;
+
+	msg = ft_strdup("Error occured: ");
+	msg = ft_strjoin(msg, error_message);
 	//proint in stderr
-	ft_printf("Error occured: %s\n", error_message);
-	exit(EXIT_FAILURE);
+	write (2, msg, ft_strlen(msg));
+	free(msg);
 }
 
 /*compares the first n characters of 2 strings s1 and s2*/
