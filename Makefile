@@ -16,8 +16,8 @@ Printf_functions = ft_printf/ft_printf  ft_printf/print_str\
 		   ft_printf/print_addresse ft_printf/print_char \
 		   ft_printf/print_hex_lower ft_printf/print_hex_upper \
 		   ft_printf/print_nbr ft_printf/print_nbr_unsigned
-Src_functions    = src/src src/split src/src2 src/get_next_line \
-			src/parsing src/parsing_utils src/get_next_line
+Src_functions    = src/src src/split src/src2 src/parsing_utils \
+			src/parsing
 Main_functions   = pipex
 
 OBJS_main   = $(Main_functions:=.o)

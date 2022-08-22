@@ -17,6 +17,7 @@
 /*prints an error message before quitting the program*/
 void	error(char *error_message)
 {
+	//proint in stderr
 	ft_printf("Error occured: %s\n", error_message);
 	exit(EXIT_FAILURE);
 }
