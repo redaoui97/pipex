@@ -49,9 +49,9 @@ char	**ft_split(char const *s, char c);
 
 /*src functions*/
 void	error(char *error_message);
-char	*get_path(char *real_path);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	free_words(char **words);
+int     has_non_alpha(char *str);
 
 /*src2 functions*/
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -60,7 +60,11 @@ char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
 
-/*parsin functions*/
+/*parsing functions*/
+void	parsing(int argc, char **argv);
+
+/*parsing utils functions*/
+char	*path_env(char **envp);
 
 /*main functions*/
 

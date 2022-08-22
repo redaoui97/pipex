@@ -12,25 +12,49 @@
 
 #include "../includes/pipex.h"
 
-/*returns the PATH env variable from envp array*/
-char	*path_env(char **envp)
+/*checks if file exists in the current directory and can be read*/
+static void	parse_infile(char *file)
 {
-	int		i;
-
-	i = 0;
-	while (envp[i])
-	{
-		if (strncmp(envp[i], "PATH", 4))
-			return(ft_strdup(envp[i]));
-		i++;
-	}
-	error ("PATH environment variable not found!");
+	if (access(file, R_OK) == -1)
+		error("file not found or cannot be read from!");
 }
 
+/*checks if file exists in the current directory and can be written into*/
+static void	parse_outfile(char *file)
+{
+	if (access(file, W_OK) == -1)//is this the correct path?
+		error("file not found or cannot be written into!");
+}
 
+/*Check if command and arguments are valid*/
+static void	parse_command(char *command)
+{
+	char	**command_args;
+	int		i;
+
+	if (ft_strncmp(command,  "", 1) == -1)
+		error ("empty command");
+	command_args = ft_split(command, ' ');
+	i = 0;
+	while (command_args[i])
+	{
+		if (i == 0)
+			if (ft_strlen(command_args[i]) > 15
+				|| has_non_alpha(command_args[i]))
+				return (free_words(command_args),
+					error ("regular expression problem on the command!"));
+		else
+		{
+			if (command_args[i][0] != '-')
+				return (free_words(command_args),
+					error ("regular expression problem on command's param!"));
+		}
+		i++;
+	}
+}
 
 /*gets the right path from a $PATH env*/
-static char	get_path(char *cmd, char *env_path)
+static char	*get_path(char *cmd, char *env_path)
 {
 	char	**paths;
 	char	*path;
@@ -41,7 +65,7 @@ static char	get_path(char *cmd, char *env_path)
 	path = ft_strdup("");
 	while (paths[i])
 	{
-		path = ft_strjoin(paths[i], '/');
+		path = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(path, cmd);
 		if (access(path, X_OK) == 0)
 			return (path);
@@ -51,41 +75,6 @@ static char	get_path(char *cmd, char *env_path)
 	return (NULL);
 }
 
-int	parse_infile(char *file)
-{
-	//check if file exists in the current directory and can be accessed
-	if (access(file, R_OK) == -1);
-		error("file not found or cannot be read from!");
-}
-
-int	parse_outfile(char *file)
-{
-	//check if file exists in the current directory and can be accessed
-	if (access(file, W_OK) == -1);//is this the correct path? 
-		error("file not found or cannot be written into!");
-}
-
-/*Check if command and arguments are valid*/
-/*hnaaaaaaaaaaaaaaaaa*/
-void	parse_command(char *command)
-void	check_arguments(char **args)
-{
-	int	i;
-
-	i = 0;
-	while (args[i])
-	{
-		if (i == 0)
-			if (ft_strlen(args[i] > 15) || has_non_alpha(args[i]))
-				error ("regular expression problem on the command!");
-		else
-		{
-			if (args[i][0] != '-')
-				error ("regular expression problem on command's parameters!");
-		}
-		i++;
-	}
-}
 void	parsing(int argc, char **argv)
 {
 	int	i;
@@ -100,9 +89,7 @@ void	parsing(int argc, char **argv)
 	}
 }
 
-
-
-void function_dparsing_9dima()
+/*void function_dparsing_9dima()
 {
 	//2-parse first command and its parameters
 		//split the string and get the command and it's parameters
@@ -118,4 +105,4 @@ void function_dparsing_9dima()
 		//split the string and get the command and it's parameters 
 		//find the command from the envp $PATH variable 
 		//put the command and parameters in the args array
-}
+}*/
