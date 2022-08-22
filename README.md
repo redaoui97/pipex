@@ -2,7 +2,7 @@
 Notes: (some can vaguely relate to processes but to linux)
 +Memory mapping : In linux kernel it is possible to map kernel address space to a user address space. This eliminates the overhead of copying user space information into the kernel space and vice versa. This can be done through a device driver and the user space device interface (/dev).
 The basic unit for virtual memory manageemnt is a page, which size is usually 4K, Whenever we work with virtual memory we work with two types of addresses (virtual and physical). All CUP access (including from KERNEL space) uses virtual addresses that are translated by the MMU into physical addresses with the help of page tables. (Private virtyal memory address space managed by process) 
-<img src="learning_materials/mmu.png">
+<img src="./learning_materials/mmu.png">
 +Page tables : 
 <img src="./learning_materials/page.png">
 +MMU : (memory management unit) is used to translate virtual addresses into physical ones, is there mmu in each abstraction level? 
@@ -25,13 +25,13 @@ ext4 filesystem: Linux file system originally made for Minix OS
 
 ************************************************************************************************************************************************************************************************************************************************************
 Parts: (from the GNU C library documentation)
-1-Unix processes in C
-2-Threads
-3-Pipes ad FIFOs
-4-Redirection
+1-Unix processes in C <br>
+2-Threads<br>
+3-Pipes ad FIFOs<br>
+4-Redirection<br>
 ------------------------------
 
-1-UNIX processes in C: 
+<h4>1-UNIX processes in C: </h4>
 <p>
 Processes are the primitive units for allocation of system resources. each process has its own address space and usually one thread of control. A process executes a program; you can have multiple processes executing the same program, but each process has its own copy of the program within its own address space and executes it independently of the other copies.
 Processes are organized hierarchically, each process has a parent process which explicitly arranged to create it. The process created by a given parent are called child processes. A child inherits many of its attributes from the parent process.
@@ -40,10 +40,10 @@ Processes are organized hierarchically, each process has a parent process which 
 +How can a program control a child process.
 	-Process creation concept: A new process is created when one of the functions (posix_spawn, fork, _fork, vfork) is called
 </p>
-3-Pipes and FIFOs:
+<h4>3-Pipes and FIFOs: </h4>
 A pipe is a mechanism for interprocess communication; data written to the pipe by one process can be read by another process. The data is handled in a first-in first-out (FIFO) order. The pipe has no name; it is create for noe use and both ends must be inhereted from the single process which created the pipe.<br>
 A FIFO special file is similar to a pipe, but instad of being anonymous, temporary connection, a FIFO has a name. Processes open the FIFO by name in order to communicate through it.<br>
-4-Stream Redirection:
+<h4>4-Stream Redirection:</h4>
 Before the C shell executed a command, it scans the command line for redirection characters. These special notations direct the shell to redirect input and output.<br>
 Overwrite : > (standard output) | < (standard input) | 2> (standard error)<br>
 Append	  : >> (standard output) | << (standard input) | 2>> (standard error)<br>
@@ -56,9 +56,8 @@ You can redirect the standard input and output of a command with the following s
 	<li>>& File: Uses the specified File as tandard output. The & redirects both stdout and stderr to the specified file</li>
 	<li>>&! File: combination of >& File and >! File</li>
 </ul>
-------------------------------------------------------------------------------------------------------------------------------
-Project: 
-Allowed function: <br>
+-----------------------------------------------------<br>
+Project: Allowed function: <br>
 -perror: (void perror (const char *str)), prints a descriptive eror message to stderr <br>
 -----------------------------------------------------<br>
 -strerror: (char *strerror(int errnum)), accepts an error number argument ernum and returns a pointer to the corresponding message string <br>
@@ -82,4 +81,3 @@ Allowed function: <br>
 -waitpid (pid_t waitpid(pid_t pid, int *wstatus, int options)): Parent process waits for the child process to finish<br>
 ----------------------------------------------------------------------<br>
 ----------------------------------------------------------------------<br>
-Pipes: 
