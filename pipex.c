@@ -38,7 +38,7 @@ int	main(int argc, char *argv[], char **envp)
 	if (argc == 5)
 	{
 		/*Parse env and other arguments*/
-		parsing(argc, argv);
+		parsing(argc, argv, envp);
 		// /*Create a pipe*/
 		// if(pipe(pipe_fd) == -1)
 		// 	error("Pipe creation error occured!");
@@ -55,7 +55,6 @@ int	main(int argc, char *argv[], char **envp)
 		// ft_printf("This is the parent whose pid : %d talking!\n", (int)pid);
 		// /*Wait for the first process*/
 		// second_part();
-
 	}
 	else
 		error("Invalid arguments!");

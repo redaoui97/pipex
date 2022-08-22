@@ -17,7 +17,7 @@ static void	parse_infile(char *file)
 {
 	//if the infile doesn't exsist, an error message should be printed in stderr and the first command should be executed
 	if (access(file, R_OK) == -1)
-		error("file not found or cannot be read from!");
+		error("file not found or cannot be read from!\n");
 }
 
 /*checks if file exists in the current directory and can be written into*/
@@ -25,33 +25,28 @@ static void	parse_outfile(char *file)
 {
 	//if the outfile doesn't exist, it should be created, incase of a creation error, an error message should be printed into stderr
 	if (access(file, W_OK) == -1)//is this the correct path?
-		error("file not found or cannot be written into!");
+		error("file not found or cannot be written into!\n");
 }
 
-/*Check if command and arguments are valid*/
-static void	parse_command(char *command)
+/*returns the PATH env variable from envp array*/
+static char	*path_env(char **envp)
 {
-	char	**command_args;
+	//It returns the wrong path
 	int		i;
 
-	//I should instead of this check if the command exists and is executable, delete this
-	if (ft_strlen(command) == 0)
-		error ("empty command");
-	command_args = ft_split(command, ' ');
 	i = 0;
-	while (command_args[i])
+	while (envp[i])
 	{
-		if (i == 0)
-		{
-			if (ft_strlen(command_args[i]) > 15 || has_non_alpha(command_args[i]))
-				return (free_words(command_args), error ("regular expression problem on the command!"));
-		}
+		if (!ft_strncmp(envp[i], "PATH", 4))
+			return (ft_strdup(envp[i]));
 		i++;
 	}
+	error ("PATH environment variable not found!");
+	return (NULL);
 }
 
 /*gets the right path from a $PATH env*/
-char	*get_path(char *cmd, char *env_path)
+static char	*get_path(char *cmd, char *env_path)
 {
 	char	**paths;
 	char	*path;
@@ -60,7 +55,7 @@ char	*get_path(char *cmd, char *env_path)
 	paths = ft_split(env_path, ':');
 	i = 0;
 	path = ft_strdup("");
-	while (paths[i])
+	while (paths[i] != NULL)
 	{
 		path = ft_strjoin(paths[i], "/");
 		path = ft_strjoin(path, cmd);
@@ -68,11 +63,35 @@ char	*get_path(char *cmd, char *env_path)
 			return (path);
 		i++;
 	}
-	error("command not found!");
+	error("command not found!\n");
 	return (NULL);
 }
 
-void	parsing(int argc, char **argv)
+/*Check if command and arguments are valid*/
+static void	parse_command(char *command, char **envp)
+{
+	char	**command_args;
+	char	*path;
+	int		i;
+
+	//I should instead of this check if the command exists and is executable, delete this
+	//many leaks here
+	if (ft_strlen(command) == 0)
+		error ("empty command\n");
+	command_args = ft_split(command, ' ');
+	i = 0;
+	path = get_path(command_args[0], path_env(envp));
+	ft_printf("%s\n",path);
+	if (!path)
+		error ("Command not found!\n");
+	pause();
+	while (command_args[i])
+	{
+		i++;
+	}
+}
+
+void	parsing(int argc, char **argv, char **envp)
 {
 	int	i;
 
@@ -81,12 +100,12 @@ void	parsing(int argc, char **argv)
 	if there is an error opening filein or executing the first command, an error message should be written into stderr
 	*/
 	parse_infile(argv[1]);//try this << eof| wc -l
-	// parse_outfile(argv[argc - 1]);
-	// while (i < (argc - 1))
-	// {
-	// 	parse_command(argv[i]);
-	// 	i++;
-	// }
+	//parse_outfile(argv[argc - 1]);
+	while (i < (argc - 1))
+	{
+		parse_command(argv[i], envp);
+		i++;
+	}
 }
 
 /*void function_dparsing_9dima()

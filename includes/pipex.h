@@ -57,10 +57,8 @@ char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
 
 /*parsing functions*/
-void	parsing(int argc, char **argv);
-
+void	parsing(int argc, char **argv, char **envp);
 /*parsing utils functions*/
-char	*path_env(char **envp);
 
 /*main functions*/
 
