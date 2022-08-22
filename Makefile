@@ -12,13 +12,12 @@
 
 CC = gcc
 Flags = -Wall -Wextra -Werror
-Main_functions   = pipex
-Src_functions    = src/src 
-Printf_functions = ft_printf/ft_printf ft_printf/ft_strlen \
+Printf_functions = ft_printf/ft_printf  ft_printf/print_str\
 		   ft_printf/print_addresse ft_printf/print_char \
 		   ft_printf/print_hex_lower ft_printf/print_hex_upper \
-		   ft_printf/print_nbr ft_printf/print_nbr_unsigned \
-		   ft_printf/print_str
+		   ft_printf/print_nbr ft_printf/print_nbr_unsigned
+Main_functions   = pipex
+Src_functions    = src/src src/split src/src2 src/get_next_line
 
 OBJS_main   = $(Main_functions:=.o)
 OBJS_src    = $(Src_functions:=.o)

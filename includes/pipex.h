@@ -27,35 +27,41 @@
 # endif
 
 /*ft_printf functions*/
-int			ft_printf(const char *f, ...);
-size_t		ft_strlen(const char *s);
-int			print_addresse(unsigned long int adr);
-int			print_char(char chr);
-int			print_hex_lower(unsigned int a);
-int			print_hex_upper(unsigned int a);
-int			print_nbr_unsigned(unsigned int n);
-int			print_nbr(int n);
-int			print_str(char *str);
+int		ft_printf(const char *f, ...);
+size_t	ft_strlen(const char *s);
+int		print_addresse(unsigned long int adr);
+int		print_char(char chr);
+int		print_hex_lower(unsigned int a);
+int		print_hex_upper(unsigned int a);
+int		print_nbr_unsigned(unsigned int n);
+int		print_nbr(int n);
+int		print_str(char *str);
 
 /*get_next_line functions*/
 char	*get_next_line(int fd);
-int	    init_function(char **text, char **buffer);
+int		init_function(char **text, char **buffer);
 char	*fix_line_text(char **text, char **line, int nl_position);
 char	*fix_text(char **str, int nl_position);
-int	    check_newline(char *buffer);
+int		check_newline(char *buffer);
 
-/*main functions*/
-
+/*split*/
+char	**ft_split(char const *s, char c);
 
 /*src functions*/
-void		error(char *error_message);
-char        *get_path(char *real_path);
+void	error(char *error_message);
+char	*get_path(char *real_path);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
+void	free_words(char **words);
 
-/*src functions 2*/
+/*src2 functions*/
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s1);
 size_t	ft_strlen(const char *s);
+
+/*parsin functions*/
+
+/*main functions*/
 
 #endif

@@ -38,7 +38,7 @@ int	main(int argc, char *argv[], char **envp)
 	if (argc == 5)
 	{
 		/*Parse env and other arguments*/
-		parsing();
+		parsing(argv);
 		/*Create a pipe*/
 		if(pipe(pipe_fd) == -1)
 			error("Pipe creation error occured!");

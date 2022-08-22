@@ -1,5 +1,6 @@
 #include "includes/pipex.h"
 
+
 int main(int argc, char **argv, char **envp)
 {
 	pid_t   pid;
@@ -10,8 +11,9 @@ int main(int argc, char **argv, char **envp)
 	char    *args[]={"grep","printf",NULL};
 	char    *args2[]={"wc", "-l", NULL};
 	char	test[52];
+	char	**paths;
 	int     outfile;
-
+	int		i = 0;
 	//Idk if I need to have NULL as the last argument for execve's 2nd arg
 	// Create a pipe and error check
 
@@ -19,6 +21,9 @@ int main(int argc, char **argv, char **envp)
 		//executes the first command and terminates the first child process
 		//A new child process is created taking the stdout of the pipe as stdin
 		//executes the second command and stores the output in the outfile then exits
+	// paths = ft_split(envp, '\n');
+	while (envp[i])
+		printf("%s\n",envp[i++]);
 	if (pipe(ends) == -1)
 		return (1);
 	fd = open(file, O_RDWR);

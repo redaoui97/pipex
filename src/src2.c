@@ -11,7 +11,9 @@
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
+/*************************  Functions collection 2 ****************************/
 
+/*allocates and returns pointer to a substring starting from a specific pos*/
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*substr;
@@ -34,6 +36,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (substr);
 }
 
+/*allocates a given size of memory and overrates the memory cases with NULL*/
 void	*ft_calloc(size_t count, size_t size)
 {
 	void	*res;
@@ -48,6 +51,7 @@ void	*ft_calloc(size_t count, size_t size)
 	return (res);
 }
 
+/*allocates and copies the 2 strings given in param into the allocated space*/
 char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*str;
@@ -77,6 +81,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (str);
 }
 
+/*allocates and copies the string given in param into the allocated space*/
 char	*ft_strdup(const char *s1)
 {
 	char	*copy;
@@ -97,6 +102,7 @@ char	*ft_strdup(const char *s1)
 	return (copy);
 }
 
+/*returns the length of a string*/
 size_t	ft_strlen(const char *s)
 {
 	size_t	l;
