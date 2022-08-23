@@ -39,7 +39,7 @@ static void	parse_command(char *command, char **envp)
 	free (path);
 }
 
-/*was supposed to parse */
+/*was supposed to parse infile and outfile too but were handled in exec*/
 void	parsing(int argc, char **argv, char **envp)
 {
 	parse_command(argv[2], envp);

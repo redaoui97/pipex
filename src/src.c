@@ -21,7 +21,6 @@ void	error(char *error_message)
 
 	msg = ft_strdup("Error occured: ");
 	msg = ft_strjoin(msg, error_message);
-	//print in stderr
 	write (2, msg, ft_strlen(msg));
 	free(msg);
 }

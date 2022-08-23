@@ -25,6 +25,7 @@ OBJS_src    = $(Src_functions:=.o)
 OBJS_printf = $(Printf_functions:=.o)
 NAME = pipex
 
+Compiling = 1
 Color1 = \e[92;5;118m
 Color2 = \033[0;33m
 
@@ -34,10 +35,16 @@ all : $(NAME)
 
 $(NAME): $(OBJS_main) $(OBJS_printf) $(OBJS_src)
 	@$(CC) $(Flags) $(OBJS_printf) $(OBJS_main) $(OBJS_src) -o $(NAME)
-	@printf "${Color1}Compiled successfully!\n"
+	@printf "${Color1}│\n          Compiled successfully!\n"
 
 %.o: %.c includes/pipex.h
-	@$(CC) $(FLAGS) -c $< -o $@
+	@if [ $(Compiling) = '1' ]; then\
+		printf "${Color1}${Color1}               Compiling...               ${Color1}\n${Color1}│";\
+	fi
+	$(eval Compiling=$(shell echo $$(($(Compiling)+1))))
+	@printf "${Color1}▓▓▓"
+	@$(CC) $(Flag) -c $< -o $@
+
 
 norm:
 	norminette -R CheckForbiddenSourceHeader *

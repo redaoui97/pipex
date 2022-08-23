@@ -69,33 +69,36 @@ static void	second_part(char **argv, char **envp, int *pipe_fd)
 }
 
 /*Main code, executes major instructions*/
-int	main(int argc, char *argv[], char **envp)
+static void	pipex(int argc, char **argv, char **envp)
 {
 	char	*paths[2];
 	int		pipe_fd[2];
 	pid_t	pid;
 	pid_t	pid2;
 
+	parsing(argc, argv, envp);
+	if (pipe(pipe_fd) == -1)
+		fatal_error("failed to open a pipe!\n");
+	pid = fork();
+	if (pid == -1)
+		fatal_error("failed to create a child process!\n");
+	if (pid == 0)
+		first_part(argv, envp, pipe_fd);
+	close (pipe_fd[1]);
+	pid2 = fork();
+	if (pid2 == -1)
+		fatal_error("failed to create a child process!\n");
+	if (pid2 == 0)
+		second_part(argv, envp, pipe_fd);
+	close (pipe_fd[1]);
+	waitpid(pid, NULL, 0);
+	waitpid(pid2, NULL, 0);
+}
+
+int	main(int argc, char *argv[], char **envp)
+{
 	if (argc == 5)
-	{
-		parsing(argc, argv, envp);
-		if (pipe(pipe_fd) == -1)
-			fatal_error("failed to open a pipe!\n");
-		pid = fork();
-		if (pid == -1)
-			fatal_error("failed to create a child process!\n");
-		if (pid == 0)
-			first_part(argv, envp, pipe_fd);
-		close (pipe_fd[1]);
-		pid2 = fork();
-		if (pid2 == -1)
-			fatal_error("failed to create a child process!\n");
-		if (pid2 == 0)
-			second_part(argv, envp, pipe_fd);
-		close (pipe_fd[1]);
-		waitpid(pid, NULL, 0);
-		waitpid(pid2, NULL, 0);
-	}
+		pipex(argc, argv, envp);
 	else
 		error("Invalid arguments!");
 	return (0);
