@@ -39,7 +39,12 @@ static void	first_part(char **argv, char **envp, int *pipe_fd)
 	close (pipe_fd[1]);
 	execve(path, cmd_args, envp);
 }
-
+/*
+The execution should be cut in 3 parts:
+Part1: reads from file or heredoc and create a pipe 
+part2: loops through commands closing the pipe given and returning a new pipe
+part3: closes the pipe given and writes output into a file 
+*/
 /*Takes the input from the output side of the pipe and executes the 2nd cmd*/
 static void	second_part(char **argv, char **envp, int *pipe_fd)
 {
@@ -85,6 +90,7 @@ static void	pipex(int argc, char **argv, char **envp)
 	if (pid == 0)
 		first_part(argv, envp, pipe_fd);
 	close (pipe_fd[1]);
+	//insert piping function 
 	pid2 = fork();
 	if (pid2 == -1)
 		fatal_error("failed to create a child process!\n");
