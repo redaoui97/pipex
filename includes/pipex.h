@@ -13,18 +13,12 @@
 #ifndef PIPEX_H
 # define PIPEX_H
 
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <sys/wait.h>
-#include <stdarg.h>
-# ifndef MAX_FD
-#  define MAX_FD 65535
-# endif
-# ifndef BUFFER_SIZE
-#  define BUFFER_SIZE    1
-# endif
+# include <unistd.h>
+# include <fcntl.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <sys/wait.h>
+# include <stdarg.h>
 
 /*ft_printf functions*/
 int		ft_printf(const char *f, ...);
@@ -37,17 +31,15 @@ int		print_nbr_unsigned(unsigned int n);
 int		print_nbr(int n);
 int		print_str(char *str);
 
-/*get_next_line functions*/
-char	*get_next_line(int fd);
-
 /*split*/
 char	**ft_split(char const *s, char c);
 
 /*src functions*/
 void	error(char *error_message);
+void	fatal_error(char *error_message);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	free_words(char **words);
-int     has_non_alpha(char *str);
+int		has_non_alpha(char *str);
 
 /*src2 functions*/
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -58,8 +50,9 @@ size_t	ft_strlen(const char *s);
 
 /*parsing functions*/
 void	parsing(int argc, char **argv, char **envp);
-/*parsing utils functions*/
 
-/*main functions*/
+/*parsing utils functions*/
+char	*path_env(char **envp);
+char	*get_path(char *cmd, char *env_path);
 
 #endif

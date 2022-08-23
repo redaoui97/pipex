@@ -13,18 +13,47 @@
 #include "includes/pipex.h"
 
 /*Executes the first command and sends the result to the input side of pipe*/
-static void	first_part(char *args, char **envp, char *path)
+static void	first_part(char **argv, char **envp, int *pipe_fd)
 {
-	//open the infile
-	//set the infile fd as stdin with dup2
-	//execve(path, args, envp);
-	//how can I free options before executing execve? 
+	char	*path;
+	char	**cmd_args;
+	int		infile_fd;
+	int		i;
+
+	cmd_args = ft_split(argv[2], ' ');
+	i = 0;
+	path = get_path(cmd_args[0], path_env(envp));
+	infile_fd = open (argv[1], O_RDONLY);
+	if (infile_fd == -1)
+		error ("failed to open infile!\n");
+	dup2(infile_fd, 0);
+	dup2(pipe_fd[1], 1);
+	close (infile_fd);
+	close (pipe_fd[0]);
+	close (pipe_fd[1]);
+	execve(path, cmd_args, envp);
 }
 
 /*Takes the input from the output side of the pipe and executes the 2nd cmd*/
-static void	second_part(char *args, char **envp, char *path)
+static void	second_part(char **argv, char **envp, int *pipe_fd)
 {
-	//execve(path, args, envp);
+	char	*path;
+	char	**cmd_args;
+	int		outfile_fd;
+	int		i;
+
+	cmd_args = ft_split(argv[3], ' ');
+	i = 0;
+	path = get_path(cmd_args[0], path_env(envp));
+	outfile_fd = open (argv[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
+	// there is probably an error when file can't open try : file/txt or something
+	if (outfile_fd == -1)
+		fatal_error ("no such file or directory!\n");
+	dup2(pipe_fd[0], 0);
+	dup2(outfile_fd, 1);
+	close (outfile_fd);
+	close (pipe_fd[0]);
+	execve(path, cmd_args, envp);
 }
 
 /*Main code, executes major instructions*/
@@ -37,59 +66,25 @@ int	main(int argc, char *argv[], char **envp)
 
 	if (argc == 5)
 	{
-		/*Parse env and other arguments*/
 		parsing(argc, argv, envp);
-		// /*Create a pipe*/
-		// if(pipe(pipe_fd) == -1)
-		// 	error("Pipe creation error occured!");
-		// pid = fork();
-		// if (pid == -1)
-		// 	error("Process creation error occured!");
-		// if (pid == 0)
-		// {
-		// 	/*Here we execute the first part and store the output in the pipe*/
-		// 	first_part(argv[1], argv[2], envp);
-		// }
-		// /*This is the parent's part, it needs to wait for the child to finish and then execute the second part*/
-		// /*I need to wait for the child processes before executing the second part*/
-		// ft_printf("This is the parent whose pid : %d talking!\n", (int)pid);
-		// /*Wait for the first process*/
-		// second_part();
+		if (pipe(pipe_fd) == -1)
+			fatal_error("failed to open a pipe!\n");
+		pid = fork();
+		if (pid == -1)
+			fatal_error("failed to create a child process!\n");
+		if (pid == 0)
+			first_part(argv, envp, pipe_fd);
+		close (pipe_fd[1]);
+		pid2 = fork();
+		if (pid2 == -1)
+			fatal_error("failed to create a child process!\n");
+		if (pid2 == 0)
+			second_part(argv, envp, pipe_fd);
+		close (pipe_fd[1]);
+		waitpid(pid, NULL, 0);
+		waitpid(pid2, NULL, 0);
 	}
 	else
 		error("Invalid arguments!");
-	/*Wait for the second process*/
 	return (0);
 }
-
-/*
-pipe()
-  |
-  +--- fork()
-         |
-         +--- child1 [cmd1]
-         |      +-- dup2(fd_infile, STDIN))
-         |      +-- dup2(pipe[1], STDOUT)
-         |      +-- close(pipe[0])
-         |      +-- close(pipe[1])
-         |      +-- ft_split the command options
-         |          and find the correct path
-         |      +-- execve(cmd1_path, options, envp)
-         |
-         +--- child2 [cmd2]
-         |      +-- dup2(pipe[0], STDIN)
-         |      +-- dup2(fd_outfile, STDOUT)
-         |      +-- close(pipe[0])
-         |      +-- close(pipe[1])
-         |      +-- ft_split the command options
-         |          and find the correct path
-         |      +-- execve(cmd2_path, options, envp)
-         |
-         +--- parent
-                +-- close(pipe[0])
-                +-- close(pipe[1])
-                +-- close(fd_infile)
-                +-- close(fd_outfile)
-                +-- waitpid(pid1, status, 0)
-                +-- waitpid(pid2, status, 0)
-*/

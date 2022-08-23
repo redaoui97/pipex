@@ -21,9 +21,15 @@ void	error(char *error_message)
 
 	msg = ft_strdup("Error occured: ");
 	msg = ft_strjoin(msg, error_message);
-	//proint in stderr
+	//print in stderr
 	write (2, msg, ft_strlen(msg));
 	free(msg);
+}
+
+void	fatal_error(char *error_message)
+{
+	error(error_message);
+	exit(EXIT_FAILURE);
 }
 
 /*compares the first n characters of 2 strings s1 and s2*/
