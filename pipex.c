@@ -17,6 +17,7 @@ static void	first_part(char **argv, char **envp, int *pipe_fd)
 {
 	char	*path;
 	char	**cmd_args;
+	char	*err;
 	int		infile_fd;
 	int		i;
 
@@ -25,7 +26,12 @@ static void	first_part(char **argv, char **envp, int *pipe_fd)
 	path = get_path(cmd_args[0], path_env(envp));
 	infile_fd = open (argv[1], O_RDONLY);
 	if (infile_fd == -1)
-		error ("failed to open infile!\n");
+	{
+		err = ft_strdup("no such file or directory: ");
+		err = ft_strjoin(err, argv[1]);
+		err = ft_strjoin(err, "\n");
+		fatal_error(err);
+	}
 	dup2(infile_fd, 0);
 	dup2(pipe_fd[1], 1);
 	close (infile_fd);
@@ -41,14 +47,20 @@ static void	second_part(char **argv, char **envp, int *pipe_fd)
 	char	**cmd_args;
 	int		outfile_fd;
 	int		i;
+	char	*err;
 
 	cmd_args = ft_split(argv[3], ' ');
 	i = 0;
 	path = get_path(cmd_args[0], path_env(envp));
 	outfile_fd = open (argv[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	// there is probably an error when file can't open try : file/txt or something
 	if (outfile_fd == -1)
-		fatal_error ("no such file or directory!\n");
+	{
+		err = ft_strdup("no such file or directory: ");
+		err = ft_strjoin(err, argv[4]);
+		err = ft_strjoin(err, "\n");
+		fatal_error(err);
+		free (err);
+	}
 	dup2(pipe_fd[0], 0);
 	dup2(outfile_fd, 1);
 	close (outfile_fd);

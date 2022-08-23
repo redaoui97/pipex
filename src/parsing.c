@@ -12,22 +12,6 @@
 
 #include "../includes/pipex.h"
 
-/*checks if file exists in the current directory and can be read from*/
-static void	parse_infile(char *file)
-{
-	char	*err;
-	// I was writing error messages for unfound file
-	if (access(file, R_OK) == -1)
-		error("file not found or cannot be read from!\n");
-}
-
-/*checks if file exists in the current directory and can be written into*/
-static void	parse_outfile(char *file)
-{
-	if (access(file, W_OK) == -1)//is this the correct path?
-		error("file not found or cannot be written into!\n");
-}
-
 /*Check if command and arguments are valid*/
 static void	parse_command(char *command, char **envp)
 {
@@ -55,10 +39,9 @@ static void	parse_command(char *command, char **envp)
 	free (path);
 }
 
+/*was supposed to parse */
 void	parsing(int argc, char **argv, char **envp)
 {
-	parse_infile(argv[1]);//try this << eof| wc -l
 	parse_command(argv[2], envp);
 	parse_command(argv[3], envp);
-	//parse_outfile(argv[4]);
 }
