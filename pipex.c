@@ -90,7 +90,7 @@ static void	pipex(int argc, char **argv, char **envp)
 		fatal_error("failed to create a child process!\n");
 	if (pid2 == 0)
 		second_part(argv, envp, pipe_fd);
-	close (pipe_fd[1]);
+	close (pipe_fd[0]);
 	waitpid(pid, NULL, 0);
 	waitpid(pid2, NULL, 0);
 }
