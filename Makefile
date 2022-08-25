@@ -25,6 +25,21 @@ OBJS_src    = $(Src_functions:=.o)
 OBJS_printf = $(Printf_functions:=.o)
 NAME = pipex
 
+
+#Bonus
+Printf_functions_bonus = bonus/ft_printf/ft_printf  bonus/ft_printf/print_str\
+		   bonus/ft_printf/print_addresse bonus/ft_printf/print_char \
+		   bonus/ft_printf/print_hex_lower bonus/ft_printf/print_hex_upper \
+		   bonus/ft_printf/print_nbr bonus/ft_printf/print_nbr_unsigned
+Src_functions_bonus    = bonus/src/src bonus/src/split bonus/src/src2 \
+			bonus/src/parsing_utils bonus/src/parsing
+Main_functions_bonus   = bonus/pipex
+
+OBJS_main_bonus  = $(Main_functions_bonus :=.o)
+OBJS_src_bonus     = $(Src_functions_bonus :=.o)
+OBJS_printf_bonus  = $(Printf_functions_bonus :=.o)
+NAME2 = pipex
+
 Compiling = 1
 Color1 = \e[92;5;118m
 Color2 = \033[0;33m
@@ -45,16 +60,24 @@ $(NAME): $(OBJS_main) $(OBJS_printf) $(OBJS_src)
 	@printf "${Color1}▓▓▓"
 	@$(CC) $(Flag) -c $< -o $@
 
+bonus : $(NAME2)
 
+$(NAME2): $(OBJS_main_bonus) $(OBJS_printf_bonus) $(OBJS_src_bonus)
+	@$(CC) $(Flags) $(OBJS_printf_bonus) $(OBJS_main_bonus) $(OBJS_src_bonus) -o $(NAME2)
+	@printf "${Color1}│\n          Compiled successfully!\n"
+
+#compiling for bonus
 norm:
 	norminette -R CheckForbiddenSourceHeader *
 
 clean:
 	@rm -f $(OBJS_main) $(OBJS_src) $(OBJS_printf)
-	@printf "${Color2}Removing object files...\n"
+	@printf "${Colors2}Removing object files...\n"
 
 fclean: clean
 	@rm -f $(NAME)
 	@printf "${Color2}Removing executable...\n"
+
+#Here bonus compiling
 
 re: fclean all
