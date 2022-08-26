@@ -46,7 +46,9 @@ part2: loops through commands closing the pipe given and returning a new pipe
 part3: closes the pipe given and writes output into a file 
 */
 /*Takes the input from the output side of the pipe and executes the 2nd cmd*/
-static void	second_part(char **argv, char **envp, int *pipe_fd)
+
+
+static void	third_part(int argc ,char **argv, char **envp, int *pipe_fd)
 {
 	char	*path;
 	char	**cmd_args;
@@ -57,7 +59,7 @@ static void	second_part(char **argv, char **envp, int *pipe_fd)
 	cmd_args = ft_split(argv[3], ' ');
 	i = 0;
 	path = get_path(cmd_args[0], path_env(envp));
-	outfile_fd = open (argv[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
+	outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (outfile_fd == -1)
 	{
 		err = ft_strdup("no such file or directory: ");
@@ -74,11 +76,17 @@ static void	second_part(char **argv, char **envp, int *pipe_fd)
 }
 
 /*Main code, executes major instructions*/
-static void	pipex_bonus(char **argv, char **envp)
+static void	pipex_bonus(int argc, char **argv, char **envp)
 {
 	int		pipe_fd[2];
+	int		pipe_fd2[2];
 	pid_t	pid;
 	pid_t	pid2;
+	//bonus_variables
+	pid_t	pid_x;
+	int		cmd_position;
+	char	**cmd_argments;
+	char	*path;
 
 	parsing(argv, envp);
 	if (pipe(pipe_fd) == -1)
@@ -88,14 +96,48 @@ static void	pipex_bonus(char **argv, char **envp)
 		fatal_error("failed to create a child process!\n");
 	if (pid == 0)
 		first_part(argv, envp, pipe_fd);
-	close (pipe_fd[1]);
-	//insert piping function 
+	//close (pipe_fd[1]); 
+	//-------------------------------------
+	if (argc > 5)
+	{
+		cmd_argments = NULL;
+		cmd_position = 3;
+		while (cmd_position < argc - 2)
+		{
+			close(pipe_fd[1]);
+			if (pipe(pipe_fd2) == -1)
+				fatal_error("failed to open a pipe!\n");
+			pid_x = fork();
+			if (pid_x == 0)
+			{
+				path = get_path(cmd_argments[0], path_env(envp));
+				cmd_argments = ft_split(argv[cmd_position], ' ');
+				dup2(pipe_fd[0], 0);
+				dup2(pipe_fd2[1], 1);
+				close(pipe_fd[0]);
+				close(pipe_fd[1]);
+				close(pipe_fd2[0]);
+				close(pipe_fd2[1]);
+				execve(path, cmd_argments, envp);
+			}
+			close (pipe_fd[0]);
+			close (pipe_fd[1]);
+			if (pipe(pipe_fd) == -1)
+				fatal_error("failed to open a pipe!\n");
+			close(pipe_fd2[1]);
+			cmd_position++;
+			//I need to have 2 pipes simultanously, at the end of the iteration, the pipe should be duplicated before it gets destroyed at the start of the next iteration
+			//This function probably needs some maintenance: free_words, maybe I should just delete it
+		}
+		close(pipe_fd2[1]);
+	}
+	//-------------------------------------
 	pid2 = fork();
 	if (pid2 == -1)
 		fatal_error("failed to create a child process!\n");
 	if (pid2 == 0)
-		second_part(argv, envp, pipe_fd);
-	close (pipe_fd[0]);
+		third_part(argc, argv, envp, pipe_fd2);
+	close (pipe_fd2[0]);
 	ft_printf("%d\n",pipe_fd[0]);
 	waitpid(pid, NULL, 0);
 	waitpid(pid2, NULL, 0);
@@ -103,8 +145,8 @@ static void	pipex_bonus(char **argv, char **envp)
 
 int	main(int argc, char *argv[], char **envp)
 {
-	if (argc == 5)
-		pipex_bonus(argv, envp);
+	if (argc >= 5)
+		pipex_bonus(argc, argv, envp);
 	else
 		error("Invalid arguments!");
 	return (0);
