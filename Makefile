@@ -10,8 +10,6 @@
 #                                                                              #
 # **************************************************************************** #
 
-CC = gcc
-Flags = -Wall -Wextra -Werror
 Printf_functions = ft_printf/ft_printf  ft_printf/print_str\
 		   ft_printf/print_addresse ft_printf/print_char \
 		   ft_printf/print_hex_lower ft_printf/print_hex_upper \
@@ -23,61 +21,54 @@ Main_functions   = pipex
 OBJS_main   = $(Main_functions:=.o)
 OBJS_src    = $(Src_functions:=.o)
 OBJS_printf = $(Printf_functions:=.o)
-NAME = pipex
-
 
 #Bonus
-Printf_functions_bonus = bonus/ft_printf/ft_printf  bonus/ft_printf/print_str\
-		   bonus/ft_printf/print_addresse bonus/ft_printf/print_char \
-		   bonus/ft_printf/print_hex_lower bonus/ft_printf/print_hex_upper \
-		   bonus/ft_printf/print_nbr bonus/ft_printf/print_nbr_unsigned
-Src_functions_bonus    = bonus/src/src bonus/src/split bonus/src/src2 \
-			bonus/src/parsing_utils bonus/src/parsing
-Main_functions_bonus   = bonus/pipex
 
-OBJS_main_bonus  = $(Main_functions_bonus :=.o)
-OBJS_src_bonus     = $(Src_functions_bonus :=.o)
-OBJS_printf_bonus  = $(Printf_functions_bonus :=.o)
-NAME2 = pipex
+functions_bonus    = bonus/src/src_bonus bonus/src/split_bonus \
+				bonus/src/src2_bonus bonus/src/parsing_utils_bonus \
+				bonus/src/parsing_bonus bonus/pipex_bonus
 
+OBJS_functions_bonus    = $(functions_bonus:=.o)
+
+NAME = pipex
+NAME2 = pipex_bonus
 Compiling = 1
-Color1 = \e[92;5;118m
-Color2 = \033[0;33m
+Color1    = \e[92;5;118m
+Color2    = \033[0;33m
+CC        = gcc
+Flags     = -Wall -Wextra -Werror
 
 .Phony: all clean fclean re bonus
 
-all : $(NAME)
+all   : $(NAME)
+bonus : $(NAME2)
 
-$(NAME): $(OBJS_main) $(OBJS_printf) $(OBJS_src)
-	@$(CC) $(Flags) $(OBJS_printf) $(OBJS_main) $(OBJS_src) -o $(NAME)
-	@printf "${Color1}│\n          Compiled successfully!\n"
-
-%.o: %.c includes/pipex.h
+%.o: %.c includes/pipex.h bonus/includes/pipex_bonus.h
 	@if [ $(Compiling) = '1' ]; then\
 		printf "${Color1}${Color1}               Compiling...               ${Color1}\n${Color1}│";\
 	fi
 	$(eval Compiling=$(shell echo $$(($(Compiling)+1))))
 	@printf "${Color1}▓▓▓"
-	@$(CC) $(Flag) -c $< -o $@
+	@$(CC) $(Flags) -c $< -o $@
 
-bonus : $(NAME2)
-
-$(NAME2): $(OBJS_main_bonus) $(OBJS_printf_bonus) $(OBJS_src_bonus)
-	@$(CC) $(Flags) $(OBJS_printf_bonus) $(OBJS_main_bonus) $(OBJS_src_bonus) -o $(NAME2)
+$(NAME): $(OBJS_main) $(OBJS_printf) $(OBJS_src)
+	@$(CC) $(Flags) $(OBJS_printf) $(OBJS_main) $(OBJS_src) -o $(NAME)
 	@printf "${Color1}│\n          Compiled successfully!\n"
 
-#compiling for bonus
+$(NAME2): $(OBJS_functions_bonus) $(OBJS_printf)
+	@$(CC) $(Flags) $(OBJS_functions_bonus) $(OBJS_printf) -o $(NAME2)
+	@printf "${Color1}│\n          Compiled successfully!\n"
+	
 norm:
 	norminette -R CheckForbiddenSourceHeader *
 
 clean:
-	@rm -f $(OBJS_main) $(OBJS_src) $(OBJS_printf)
+	@rm -f $(OBJS_main) $(OBJS_src) $(OBJS_printf) $(OBJS_functions_bonus)
 	@printf "${Colors2}Removing object files...\n"
 
 fclean: clean
-	@rm -f $(NAME)
+	@rm -f $(NAME) $(NAME2)
 	@printf "${Color2}Removing executable...\n"
 
-#Here bonus compiling
 
 re: fclean all

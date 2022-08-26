@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipex_bonus.h"
 
 /*Check if command and arguments are valid*/
 static void	parse_command(char *command, char **envp)
@@ -40,7 +40,7 @@ static void	parse_command(char *command, char **envp)
 }
 
 /*was supposed to parse infile and outfile too but were handled in exec*/
-void	parsing(int argc, char **argv, char **envp)
+void	parsing(char **argv, char **envp)
 {
 	parse_command(argv[2], envp);
 	parse_command(argv[3], envp);

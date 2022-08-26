@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipex_bonus.h"
 
 /*************************  Functions collection 1 ****************************/
 
@@ -49,6 +49,7 @@ int	has_non_alpha(char *str)
 {
 	int	i;
 
+	i = 0;
 	while (str[i])
 	{
 		if (!(str[i] >= 'a' && str[i] <= 'z')

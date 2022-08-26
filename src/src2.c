@@ -101,14 +101,3 @@ char	*ft_strdup(const char *s1)
 	copy[i] = '\0';
 	return (copy);
 }
-
-/*returns the length of a string*/
-size_t	ft_strlen(const char *s)
-{
-	size_t	l;
-
-	l = 0;
-	while (s[l])
-		l++;
-	return (l);
-}

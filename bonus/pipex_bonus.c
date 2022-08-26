@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rnabil <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/pipex.h"
+#include "includes/pipex_bonus.h"
 
 /*Executes the first command and sends the result to the input side of pipe*/
 static void	first_part(char **argv, char **envp, int *pipe_fd)
@@ -74,14 +74,13 @@ static void	second_part(char **argv, char **envp, int *pipe_fd)
 }
 
 /*Main code, executes major instructions*/
-static void	pipex(int argc, char **argv, char **envp)
+static void	pipex_bonus(char **argv, char **envp)
 {
-	char	*paths[2];
 	int		pipe_fd[2];
 	pid_t	pid;
 	pid_t	pid2;
 
-	parsing(argc, argv, envp);
+	parsing(argv, envp);
 	if (pipe(pipe_fd) == -1)
 		fatal_error("failed to open a pipe!\n");
 	pid = fork();
@@ -105,7 +104,7 @@ static void	pipex(int argc, char **argv, char **envp)
 int	main(int argc, char *argv[], char **envp)
 {
 	if (argc == 5)
-		pipex(argc, argv, envp);
+		pipex_bonus(argv, envp);
 	else
 		error("Invalid arguments!");
 	return (0);
