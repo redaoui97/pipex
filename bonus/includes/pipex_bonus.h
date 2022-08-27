@@ -47,6 +47,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	*ft_calloc(size_t count, size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s1);
+char	*error_message(char *str1, char *str2);
 
 /*parsing functions*/
 void	parsing(char **argv, char **envp);

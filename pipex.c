@@ -19,10 +19,8 @@ static void	first_part(char **argv, char **envp, int *pipe_fd)
 	char	**cmd_args;
 	char	*err;
 	int		infile_fd;
-	int		i;
 
 	cmd_args = ft_split(argv[2], ' ');
-	i = 0;
 	path = get_path(cmd_args[0], path_env(envp));
 	infile_fd = open (argv[1], O_RDONLY);
 	if (infile_fd == -1)
@@ -46,11 +44,9 @@ static void	second_part(char **argv, char **envp, int *pipe_fd)
 	char	*path;
 	char	**cmd_args;
 	int		outfile_fd;
-	int		i;
 	char	*err;
 
 	cmd_args = ft_split(argv[3], ' ');
-	i = 0;
 	path = get_path(cmd_args[0], path_env(envp));
 	outfile_fd = open (argv[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
 	if (outfile_fd == -1)

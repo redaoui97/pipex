@@ -102,3 +102,14 @@ char	*ft_strdup(const char *s1)
 	copy[i] = '\0';
 	return (copy);
 }
+
+/*concatenates and returns an error message*/
+char	*error_message(char *str1, char *str2)
+{
+	char	*res;
+
+	res = ft_strdup(str1);
+	res = ft_strjoin(res, str2);
+	res = ft_strjoin(res, "\n");
+	return (res);
+}

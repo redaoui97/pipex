@@ -37,6 +37,8 @@ Color1    = \e[92;5;118m
 Color2    = \033[0;33m
 CC        = gcc
 Flags     = -Wall -Wextra -Werror
+# INC = -I includes
+# BINC = -I bonus/includes
 
 .Phony: all clean fclean re bonus
 

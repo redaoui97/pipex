@@ -29,6 +29,7 @@ Parts: (from the GNU C library documentation)<br>
 <a href="#threads">2-Threads</a><br>
 <a href="#pipes">3-Pipes ad FIFOs</a><br>
 <a href="#redirection">4-Redirection</a><br>
+<a href="#file_descriptors">5-File descriptors and open files</a>
 ------------------------------
 
 <h4 id="processes">1-UNIX processes in C: </h4>
@@ -81,3 +82,11 @@ Project: Allowed function: <br>
 -waitpid (pid_t waitpid(pid_t pid, int *wstatus, int options)): Parent process waits for the child process to finish<br>
 ----------------------------------------------------------------------<br>
 ----------------------------------------------------------------------<br>
+<h3>Relationship between file descriptors and open files</h3>
+To understand what is going on, we need to examine three data scturctures maintained by the kernel: <br>
+1-The per-process file descriptor table: For each process, the kernel maintains a table of open file descriptors. each entry in this table records informations about a single fd including: <br>
+<li>A set of flags controlling the operation of the fd</li>
+<li>A reference to the file descriptor</li>
+2-The system-wide table of open file descriptors<br>
+3-The file system inode table<br>
+<img src="./learning_materiels/filedes.png"><br>
