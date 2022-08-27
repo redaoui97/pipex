@@ -12,75 +12,54 @@
 
 #include "includes/pipex_bonus.h"
 
-static *int	execute_command(char *arg, char **envp, int *pipe_fd, int out)
+static void	execute_child(char **argv, char **envp, int fd_in, int ft_out)
 {
-	char	**cmd_args;
-	char	*path;
-	int		pipe_fd2[2];
 	pid_t	pid;
-
+	char	*path;
+	char	**cmd_args;
 	pid = fork();
 	if (pid == -1)
-		fatal_error("failed to create a child process!\n");
+		fatal_error("failed to create a child process!");
 	if (pid == 0)
 	{
-		cmd_args = ft_split(arg, ' ');
+		cmd_args = ft_split(argv[2], ' ');
 		path = get_path(cmd_args[0], path_env(envp));
-		if (pipe(pipe_fd2) == -1)
-			fatal_error("failed to open a pipe!\n");
-		dup2(pipe_fd[0], 0);
-		if (!out)
-			dup2(pipe_fd2[1], 1);
-		else
-			dup2(out, 1);
-		close (pipe_fd[0]);
-		close (pipe_fd[1]);
-		close (pipe_fd2[1]);
+		dup2(fd_in, 0);
+		dup2(fd_out, 1);
+		close (fd_int);
+		close (fd_out);
 		execve(path, cmd_args, envp);
-	} 
+	}
 }
 
 /*Main code, executes major instructions*/
 static void	pipex_bonus(int argc, char **argv, char **envp)
 {
-	int		pipe_fd[2];
-	int		pipe_fd_copy[2];
-	int		infile_fd;
-	int		outfile_fd;
+	int	pipe_fd[2];
+	int	i;
+	int	infile;
+	int	outfile;
 
-	infile_fd = open(argv[1], O_RDONLY);
-	outfile_fd = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	//redirects the infile into stdin
-	if (infile_fd == -1)
-		fatal_error(error_message("no such file or directory: ", argv[1]));
-	if (pipe(pipe_fd) == -1)
-		error("failed to open a pipe\n");
-	if (pipe(pipe_fd_copy) == -1)
-		error("failed to open a pipe\n");
-	//starts looping through cmds and executing them
-	//First iteration takes infile as input
-	//what if the infile returns -1
-	dup2(pipe_fd[0], infile_fd);
-	close(pipe_fd[0]);
+	//I can make an array for intfile and outfile to save line code
+	infile = open (argv[1], O_RDONLY);
+	if (infile == -1)
+		error (error_message("no such file or directory: ", argv[1]));
+	else
+		dup2(infile, 0);
+	close (infile);
 	i = 3;
-	while (i < argc - 1)
+	while (i < argc - 2)
 	{
-		pipe_fd_copy[0] = pipe_fd[0];
-		pipe_fd_copy[1] = pipe_fd[1];
-		if (i == argc - 2 && outfile != -1)
-			execute_command(argc[i], envp, &pipe_fd, outfile_fd);
-		else
-			execute_command(argc[i], envp, &pipe_fd, 0);
-		close (pipe_fd_copy[0]);
-		close (pipe_fd_copy[1]);
-
+		if (pipe(pipe_fd) == -1)
+			fatal_error("failed to create pipe!\n");
+		execute_child(0, pipe_fd[1]);
+		close (pipe_fd[1]);
+		dup2(pipe_fd[0], 0);
+		close (pipe_fd[0]);
 		i++;
 	}
-	if (outfile_fd == -1)
-		error(error_message("no such file or directory: ", argv[argc - 1]));
-	close (pipe_fd[0]);
-	close (pipe_fd[1]);
-	while(wait(NULL) > 0);
+	//execute last command and redirect output to outfile
+	while(wait(NULL) > 0);//waits for all child processes to finish
 }
 
 int	main(int argc, char *argv[], char **envp)
