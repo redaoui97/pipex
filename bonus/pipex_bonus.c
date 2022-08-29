@@ -28,44 +28,64 @@ static void	execute_child(char *cmd, char **envp, int fd_out)
 		dup2(fd_out, 1);
 		close (fd_out);
 		execve(path, cmd_args, envp);
-		fatal_error("there was an error executing the process!\n");
 	}
+}
+
+static void	check_heredoc(int argc, char **argv, int *first_cmd, int *append)
+{
+	int	here_doc_pipe[2];
+
+	if (ft_strncmp("here_doc", argv[1], 8))
+	{
+		first_cmd = 3;
+	}
+	else
+	{
+		first_cmd = 2;
+		append = 1;
+	}
+}
+
+static void	files_init(char	*infile, char *outfile, int	*file, int append)
+{
+
+	file[0] = open (infile, O_RDONLY);
+	if (file[0] == -1)
+	{
+		dup2(-1, 0);
+		error (error_message("no such file or directory: ", infile));
+	}
+		dup2(file[0], 0);
+		close(file[0]);
+	if (append)
+		file[1] = open (outfile, O_RDWR | O_CREAT | O_APPEND, 0777);
+	else
+		file[1] = open (outfile, O_RDWR | O_CREAT | O_TRUNC, 0777);
 }
 
 /*Main code, executes major instructions*/
 static void	pipex_bonus(int argc, char **argv, char **envp)
 {
 	int	pipe_fd[2];
+	int	file[2];
 	int	i;
-	int	infile;
-	int	outfile;
 	int	append;
 
+	parsing(argv, envp);//I still have to do some parsing
 	//heredoc and append part, if there is a heredoc append = 1 else append = 0
-	append = 0;
-	//I can make an array for intfile and outfile to save line code
-	infile = open (argv[1], O_RDONLY);
-	if (infile == -1)
-		error (error_message("no such file or directory: ", argv[1]));
-	else
-	{
-		dup2(infile, 0);
-		close(infile);
-	}
-	if (append)
-		outfile = open (argv[argc - 1], O_RDWR | O_CREAT | O_APPEND, 0777);
-	else
-		outfile = open (argv[argc - 1], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	i = 2;
+	check_heredoc(argc, argv, &i, &append);
+	files_init(argv[1], argv[argc - 1], file, append);
+	if (file[0] == -1)
+		i++;
 	while (i <= argc - 2)
 	{
 		if (pipe(pipe_fd) == -1)
 			fatal_error("failed to create pipe!\n");
 		if (i == argc - 2)
 		{
-			if (outfile == -1)
+			if (file[1] == -1)
 				fatal_error(error_message("no such file or directory: ", argv[argc - 1]));
-			execute_child(argv[i], envp, outfile);
+			execute_child(argv[i], envp, file[1]);
 		}
 		else
 			execute_child(argv[i], envp, pipe_fd[1]);
@@ -74,8 +94,8 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		close (pipe_fd[1]);
 		i++;
 	}
-	close (outfile);
-	while(wait(NULL) > 0);//waits for all child processes to finish
+	close (file[1]);
+	while(wait(NULL) > 0);
 }
 
 int	main(int argc, char *argv[], char **envp)
