@@ -26,7 +26,8 @@ OBJS_printf = $(Printf_functions:=.o)
 
 functions_bonus    = bonus/src/src_bonus bonus/src/split_bonus \
 				bonus/src/src2_bonus bonus/src/parsing_utils_bonus \
-				bonus/src/parsing_bonus bonus/pipex_bonus
+				bonus/src/parsing_bonus bonus/pipex_bonus \
+				bonus/src/get_next_line
 
 OBJS_functions_bonus    = $(functions_bonus:=.o)
 

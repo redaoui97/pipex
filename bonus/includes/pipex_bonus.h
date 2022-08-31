@@ -19,6 +19,12 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include <stdarg.h>
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE    1
+# endif
+# ifndef MAX_FD
+#  define MAX_FD 65535
+# endif
 
 /*ft_printf functions*/
 int		ft_printf(const char *f, ...);
@@ -56,4 +62,13 @@ void	parsing(int argc, char **argv, char **envp, int start);
 char	*path_env(char **envp);
 char	*get_path(char *cmd, char *env_path);
 void	check_heredoc(char **argv, int *first_cmd, int *append);
+void	files_init(char	*infile, char *outfile, int	*file, int append);
+
+/*get_next_line functions*/
+char	*get_next_line(int fd);
+int     init_function(char **text, char **buffer);
+char	*fix_line_text(char **text, char **line, int nl_position);
+char	*fix_text(char **str, int nl_position);
+int	    check_newline(char *buffer);
+
 #endif

@@ -34,42 +34,40 @@ static void	execute_child(char *cmd, char **envp, int fd_in, int fd_out)
 	}
 }
 
-/*opens infile and outfile*/
-/*if there is an error opening infile an error is stored in stderr*/
-static void	files_init(char	*infile, char *outfile, int	*file, int append)
-{
-
-	file[0] = open (infile, O_RDONLY);
-	//when there is an error opening infile, it reads from std_in
-	if (file[0] == -1)
-		error (error_message("no such file or directory: ", infile));
-	else
-	{
-		dup2(file[0], 0);
-		close(file[0]);
-	}
-	if (append)
-		file[1] = open (outfile, O_RDWR | O_CREAT | O_APPEND, 0777);
-	else
-		file[1] = open (outfile, O_RDWR | O_CREAT | O_TRUNC, 0777);
-}
-
 /*Main code, executes major instructions*/
 static void	pipex_bonus(int argc, char **argv, char **envp)
 {
 	int	pipe_fd[2];
+	int	heredoc[2];
 	int	file[2];
 	int	i;
 	int	append;
-
-	//heredoc and append part, if there is a heredoc append = 1 else append = 0
+	char	*line;
+	
 	check_heredoc(argv, &i, &append);
 	//small parsing
 	if (append)
-		parsing(argc, argv, envp, 3);
+	{
+		parsing(argc, argv, envp, 4);
+		if (pipe(heredoc) == -1)
+			fatal_error("failed to create pipe\n");
+		line = get_next_line(0);
+		while (line)
+		{
+			if (!ft_strncmp(line, argv[2], ft_strlen(argv[2])))
+				break ;
+			write (heredoc[1], line, ft_strlen(line));
+			free (line);
+			line = get_next_line(0);
+		}
+		if (line)
+			free (line);
+		close (heredoc[1]);
+	}
 	else
 		parsing(argc, argv, envp, 2);
 	//files opening 
+	file[0] = heredoc[0];
 	files_init(argv[1], argv[argc - 1], file, append);
 	while (i <= argc - 2)
 	{
@@ -84,12 +82,17 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		}
 		else
 		{
+			if (append && i == 3)
+			{
+				execute_child(argv[i], envp, heredoc[0], pipe_fd[1]);
+			}
 			if (!append && i == 2)
 				execute_child(argv[i], envp, file[0], pipe_fd[1]);
 			if (!append && i > 2)
 				execute_child(argv[i], envp, pipe_fd[0], pipe_fd[1]);
 		}
 		dup2(pipe_fd[0], 0);
+		close(heredoc[1]);
 		close (pipe_fd[0]);
 		close (pipe_fd[1]);
 		i++;
