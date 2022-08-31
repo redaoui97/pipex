@@ -66,9 +66,9 @@ void	files_init(char	*infile, char *outfile, int	*file, int append);
 
 /*get_next_line functions*/
 char	*get_next_line(int fd);
-int     init_function(char **text, char **buffer);
+int		init_function(char **text, char **buffer);
 char	*fix_line_text(char **text, char **line, int nl_position);
 char	*fix_text(char **str, int nl_position);
-int	    check_newline(char *buffer);
+int		check_newline(char *buffer);
 
 #endif

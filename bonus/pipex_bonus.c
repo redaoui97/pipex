@@ -34,6 +34,35 @@ static void	execute_child(char *cmd, char **envp, int fd_in, int fd_out)
 	}
 }
 
+static void	heredoc_part(int argc, char **argv, char **envp, int *heredoc)
+{
+	char	*line;
+
+	parsing(argc, argv, envp, 4);
+	if (pipe(heredoc) == -1)
+		fatal_error("failed to create pipe\n");
+	line = get_next_line(0);
+	while (line)
+	{
+		if (!ft_strncmp(line, argv[2], ft_strlen(argv[2])))
+			break ;
+		write (heredoc[1], line, ft_strlen(line));
+		free (line);
+		line = get_next_line(0);
+	}
+	if (line)
+		free (line);
+	close (heredoc[1]);
+}
+
+void	close_fd(int *pipe_fd, int heredoc)
+{
+	dup2(pipe_fd[0], 0);
+	close (heredoc);
+	close (pipe_fd[0]);
+	close (pipe_fd[1]);
+}
+
 /*Main code, executes major instructions*/
 static void	pipex_bonus(int argc, char **argv, char **envp)
 {
@@ -42,31 +71,12 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 	int	file[2];
 	int	i;
 	int	append;
-	char	*line;
-	
+
 	check_heredoc(argv, &i, &append);
-	//small parsing
 	if (append)
-	{
-		parsing(argc, argv, envp, 4);
-		if (pipe(heredoc) == -1)
-			fatal_error("failed to create pipe\n");
-		line = get_next_line(0);
-		while (line)
-		{
-			if (!ft_strncmp(line, argv[2], ft_strlen(argv[2])))
-				break ;
-			write (heredoc[1], line, ft_strlen(line));
-			free (line);
-			line = get_next_line(0);
-		}
-		if (line)
-			free (line);
-		close (heredoc[1]);
-	}
+		heredoc_part(argc, argv, envp, heredoc);
 	else
 		parsing(argc, argv, envp, 2);
-	//files opening 
 	file[0] = heredoc[0];
 	files_init(argv[1], argv[argc - 1], file, append);
 	while (i <= argc - 2)
@@ -76,29 +86,21 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		if (i == argc - 2)
 		{
 			if (file[1] == -1)
-				fatal_error(error_message("could not create file: ", argv[argc - 1]));
+				fatal_error(error_message("can't create :", argv[argc - 1]));
 			else
 				execute_child(argv[i], envp, pipe_fd[0], file[1]);
 		}
-		else
-		{
-			if (append && i == 3)
-			{
-				execute_child(argv[i], envp, heredoc[0], pipe_fd[1]);
-			}
-			if (!append && i == 2)
-				execute_child(argv[i], envp, file[0], pipe_fd[1]);
-			if (!append && i > 2)
-				execute_child(argv[i], envp, pipe_fd[0], pipe_fd[1]);
-		}
-		dup2(pipe_fd[0], 0);
-		close(heredoc[1]);
-		close (pipe_fd[0]);
-		close (pipe_fd[1]);
+		if (append && i == 3)
+			execute_child(argv[i], envp, heredoc[0], pipe_fd[1]);
+		if (!append && i == 2)
+			execute_child(argv[i], envp, file[0], pipe_fd[1]);
+		if (!append && i > 2 && i < (argc - 2))
+			execute_child(argv[i], envp, pipe_fd[0], pipe_fd[1]);
+		close_fd(pipe_fd, heredoc[1]);
 		i++;
 	}
 	close (file[1]);
-	while(wait(NULL) > 0);
+	while (wait (NULL) > 0);
 }
 
 int	main(int argc, char *argv[], char **envp)
