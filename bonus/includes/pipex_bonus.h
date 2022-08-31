@@ -50,10 +50,10 @@ char	*ft_strdup(const char *s1);
 char	*error_message(char *str1, char *str2);
 
 /*parsing functions*/
-void	parsing(char **argv, char **envp);
+void	parsing(int argc, char **argv, char **envp, int start);
 
 /*parsing utils functions*/
 char	*path_env(char **envp);
 char	*get_path(char *cmd, char *env_path);
-
+void	check_heredoc(char **argv, int *first_cmd, int *append);
 #endif

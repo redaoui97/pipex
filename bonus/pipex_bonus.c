@@ -12,12 +12,15 @@
 
 #include "includes/pipex_bonus.h"
 
-static void	execute_child(char *cmd, char **envp, int fd_out)
+/*executes command and stores result in fd_out*/
+static void	execute_child(char *cmd, char **envp, int fd_in, int fd_out)
 {
 	pid_t	pid;
 	char	*path;
 	char	**cmd_args;
 
+	if (fd_in < 0)
+		return ;
 	pid = fork();
 	if (pid == -1)
 		fatal_error("failed to create a child process!");
@@ -31,32 +34,20 @@ static void	execute_child(char *cmd, char **envp, int fd_out)
 	}
 }
 
-static void	check_heredoc(int argc, char **argv, int *first_cmd, int *append)
-{
-	int	here_doc_pipe[2];
-
-	if (ft_strncmp("here_doc", argv[1], 8))
-	{
-		first_cmd = 3;
-	}
-	else
-	{
-		first_cmd = 2;
-		append = 1;
-	}
-}
-
+/*opens infile and outfile*/
+/*if there is an error opening infile an error is stored in stderr*/
 static void	files_init(char	*infile, char *outfile, int	*file, int append)
 {
 
 	file[0] = open (infile, O_RDONLY);
+	//when there is an error opening infile, it reads from std_in
 	if (file[0] == -1)
-	{
-		dup2(-1, 0);
 		error (error_message("no such file or directory: ", infile));
-	}
+	else
+	{
 		dup2(file[0], 0);
 		close(file[0]);
+	}
 	if (append)
 		file[1] = open (outfile, O_RDWR | O_CREAT | O_APPEND, 0777);
 	else
@@ -71,12 +62,15 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 	int	i;
 	int	append;
 
-	parsing(argv, envp);//I still have to do some parsing
 	//heredoc and append part, if there is a heredoc append = 1 else append = 0
-	check_heredoc(argc, argv, &i, &append);
+	check_heredoc(argv, &i, &append);
+	//small parsing
+	if (append)
+		parsing(argc, argv, envp, 3);
+	else
+		parsing(argc, argv, envp, 2);
+	//files opening 
 	files_init(argv[1], argv[argc - 1], file, append);
-	if (file[0] == -1)
-		i++;
 	while (i <= argc - 2)
 	{
 		if (pipe(pipe_fd) == -1)
@@ -84,11 +78,17 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		if (i == argc - 2)
 		{
 			if (file[1] == -1)
-				fatal_error(error_message("no such file or directory: ", argv[argc - 1]));
-			execute_child(argv[i], envp, file[1]);
+				fatal_error(error_message("could not create file: ", argv[argc - 1]));
+			else
+				execute_child(argv[i], envp, pipe_fd[0], file[1]);
 		}
 		else
-			execute_child(argv[i], envp, pipe_fd[1]);
+		{
+			if (!append && i == 2)
+				execute_child(argv[i], envp, file[0], pipe_fd[1]);
+			if (!append && i > 2)
+				execute_child(argv[i], envp, pipe_fd[0], pipe_fd[1]);
+		}
 		dup2(pipe_fd[0], 0);
 		close (pipe_fd[0]);
 		close (pipe_fd[1]);

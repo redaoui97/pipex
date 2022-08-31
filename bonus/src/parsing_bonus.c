@@ -40,8 +40,11 @@ static void	parse_command(char *command, char **envp)
 }
 
 /*was supposed to parse infile and outfile too but were handled in exec*/
-void	parsing(char **argv, char **envp)
+void	parsing(int argc, char **argv, char **envp, int start)
 {
-	parse_command(argv[2], envp);
-	parse_command(argv[3], envp);
+	int	i;
+
+	i = start;
+	while (i < argc - 1)
+		parse_command(argv[i++], envp);
 }

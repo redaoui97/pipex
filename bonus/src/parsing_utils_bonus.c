@@ -55,3 +55,18 @@ char	*get_path(char *cmd, char *env_path)
 	free (paths);
 	return (NULL);
 }
+
+/*checks if there is a heredoc and sets values of first command & append*/
+void	check_heredoc(char **argv, int *first_cmd, int *append)
+{
+	if (!ft_strncmp("here_doc", argv[1], 8))
+	{
+		*first_cmd = 3;
+		*append = 1;
+	}
+	else
+	{
+		*first_cmd = 2;
+		*append = 0;
+	}
+}
