@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: rnabil <marvin@42.fr>                      +#+  +:+       +#+        */
+/*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:50:09 by rnabil            #+#    #+#             */
-/*   Updated: 2022/08/15 20:51:09 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/02 18:50:39 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@
 # ifndef MAX_FD
 #  define MAX_FD 65535
 # endif
+
+typedef struct s_data
+{
+    int     append;
+    int     first_command;
+    int     argc;
+    char    **argv;
+    char    **envp;
+}               t_data;
 
 /*ft_printf functions*/
 int		ft_printf(const char *f, ...);
@@ -54,6 +63,10 @@ void	*ft_calloc(size_t count, size_t size);
 char	*ft_strjoin(char const *s1, char const *s2);
 char	*ft_strdup(const char *s1);
 char	*error_message(char *str1, char *str2);
+
+/*src3 functions*/
+void	set_data(t_data *data, int argc, char **argv, char **envp);
+void	close_fd(int *pipe_fd, int heredoc);
 
 /*parsing functions*/
 void	parsing(int argc, char **argv, char **envp, int start);

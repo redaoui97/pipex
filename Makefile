@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: rnabil <marvin@42.fr>                      +#+  +:+       +#+         #
+#    By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/16 15:14:45 by rnabil            #+#    #+#              #
-#    Updated: 2022/08/16 15:18:45 by rnabil           ###   ########.fr        #
+#    Updated: 2022/09/02 18:54:42 by rnabil           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,7 +27,7 @@ OBJS_printf = $(Printf_functions:=.o)
 functions_bonus    = bonus/src/src_bonus bonus/src/split_bonus \
 				bonus/src/src2_bonus bonus/src/parsing_utils_bonus \
 				bonus/src/parsing_bonus bonus/pipex_bonus \
-				bonus/src/get_next_line
+				bonus/src/get_next_line bonus/src/src3_bonus
 
 OBJS_functions_bonus    = $(functions_bonus:=.o)
 

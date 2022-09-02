@@ -1,1 +1,3 @@
-fix norminette 
+check norminette 
+remove comments from makefile
+recheck headers
