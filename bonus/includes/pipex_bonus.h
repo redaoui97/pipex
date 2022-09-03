@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:50:09 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/02 18:50:39 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/03 11:17:35 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 # include <sys/wait.h>
 # include <stdarg.h>
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE    1
+#  define BUFFER_SIZE 1
 # endif
 # ifndef MAX_FD
 #  define MAX_FD 65535
@@ -28,12 +28,12 @@
 
 typedef struct s_data
 {
-    int     append;
-    int     first_command;
-    int     argc;
-    char    **argv;
-    char    **envp;
-}               t_data;
+	int		append;
+	int		first_command;
+	int		argc;
+	char	**argv;
+	char	**envp;
+}			t_data;
 
 /*ft_printf functions*/
 int		ft_printf(const char *f, ...);
@@ -67,6 +67,7 @@ char	*error_message(char *str1, char *str2);
 /*src3 functions*/
 void	set_data(t_data *data, int argc, char **argv, char **envp);
 void	close_fd(int *pipe_fd, int heredoc);
+void	close_n_wait(int file);
 
 /*parsing functions*/
 void	parsing(int argc, char **argv, char **envp, int start);

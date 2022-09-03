@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:51:59 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/02 18:53:25 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/03 11:29:26 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ static void	heredoc_part(int argc, char **argv, char **envp, int *heredoc)
 }
 
 /*executes in each loop iteration inside the main function*/
-void iteration(t_data data, int *i, int *file, int *pipe_fd)
+void	iteration(t_data data, int *i, int *file, int *pipe_fd)
 {
 	int		argc;
 	char	**argv;
 	char	**envp;
-	
+
 	argc = data.argc;
 	argv = data.argv;
 	envp = data.envp;
@@ -106,8 +106,7 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		close_fd(pipe_fd, heredoc[1]);
 		i++;
 	}
-	close (file[1]);
-	while (wait (NULL) > 0);
+	close_n_wait(file[1]);
 }
 
 /*simply executes pipex function*/

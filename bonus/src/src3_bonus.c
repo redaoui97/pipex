@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:54:01 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/02 18:51:51 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/03 11:27:55 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,16 @@ void	close_fd(int *pipe_fd, int heredoc)
 	close (heredoc);
 	close (pipe_fd[0]);
 	close (pipe_fd[1]);
+}
+
+/*closes file fd and waits for child processes to finish*/
+void	close_n_wait(int file)
+{
+	int	wait_return;
+
+	close(file);
+	close (0);
+	wait_return = wait (NULL);
+	while (wait_return > 0)
+		wait_return = wait(NULL);
 }
