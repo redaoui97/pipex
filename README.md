@@ -90,3 +90,4 @@ To understand what is going on, we need to examine three data scturctures mainta
 2-The system-wide table of open file descriptors<br>
 3-The file system inode table<br>
 <img src="./learning_materiels/filedes.png"><br>
+<h3>testing open file descriptros with lsof</h3>

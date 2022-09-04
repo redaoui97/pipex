@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:51:59 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/03 11:29:26 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/03 21:40:36 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		heredoc_part(argc, argv, envp, heredoc);
 	else
 		parsing(argc, argv, envp, 2);
-	file[0] = heredoc[0];
 	files_init(argv[1], argv[argc - 1], file, data.append);
 	while (i <= argc - 2)
 	{

@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:50:09 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/03 11:17:35 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/04 18:40:51 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@ typedef struct s_data
 	int		append;
 	int		first_command;
 	int		argc;
+	int		**pipes;
+	int		**heredoc;
 	char	**argv;
 	char	**envp;
 }			t_data;
