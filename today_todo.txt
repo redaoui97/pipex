@@ -3,3 +3,4 @@ remove comments from makefile
 recheck headers
 check leaking fds 
 check if the pipes are closed in each iteration
+fix heredoc

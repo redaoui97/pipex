@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:51:59 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/05 14:11:05 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/05 21:56:43 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	heredoc_part(int argc, char **argv, char **envp, int *heredoc)
 	char	*line;
 
 	//Maybe I have to assign heredoc array to each heredoc fd
-	parsing(argc, argv, envp, 4);
 	if (pipe(heredoc) == -1)
 		fatal_error("failed to create pipe\n");
 	line = get_next_line(0);
@@ -56,6 +55,7 @@ static void	heredoc_part(int argc, char **argv, char **envp, int *heredoc)
 	if (line)
 		free (line);
 	close (heredoc[1]);
+	parsing(argc, argv, envp, 4);
 }
 
 /*executes in each loop iteration inside the main function*/
@@ -79,9 +79,10 @@ void	iteration(t_data data, int *i, int *file, int *pipe_fd)
 		else
 			execute_child(argv[*i], envp, pipe_fd[0], file[1]);
 	}
-	if (!(data.append) && *i == 2)
+	if ((data.append == 0 && *i == 2) || (data.append && *i == 3))
 		execute_child(argv[*i], envp, file[0], pipe_fd[1]);
-	if (!(data.append) && *i > 2 && *i < (argc - 2))
+	if ((!(data.append) && *i > 2 && *i < (argc - 2)) ||
+		(data.append && *i > 2 && *i < (argc -2)))
 		execute_child(argv[*i], envp, pipe_fd[0], pipe_fd[1]);
 }
 
@@ -100,14 +101,15 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		heredoc_part(argc, argv, envp, heredoc);
 	else
 		parsing(argc, argv, envp, 2);
-	files_init(argv[1], file, data.append);
+	files_init(argv[1], file, data.append, heredoc);
 	while (i <= argc - 2)
 	{
 		if (pipe(pipe_fd) == -1)
 			fatal_error("failed to create pipe!\n");
 		if (data.append && i == 3)
 			execute_child(argv[i], envp, heredoc[0], pipe_fd[1]);
-		iteration(data, &i, file, pipe_fd);
+		if ((data.append && i > 3) || (data.append == 0 && i >= 2))
+			iteration(data, &i, file, pipe_fd);
 		close_fd(pipe_fd, heredoc[1]);
 		i++;
 	}

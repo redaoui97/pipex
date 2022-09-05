@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/22 14:02:30 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/05 13:40:37 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/05 18:49:43 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	check_heredoc(char **argv, int *first_cmd, int *append)
 /*opens infile and outfile*/
 /*opens infile when there is no here_doc*/
 /*if there is an error opening infile an error is stored in stderr*/
-void	files_init(char	*infile, int	*file, int append)
+void	files_init(char	*infile, int	*file, int append, int *heredoc)
 {
 	if (!append)
 	{
@@ -89,6 +89,7 @@ void	files_init(char	*infile, int	*file, int append)
 	}
 	else
 	{
+		file[0] = heredoc[0];
 		dup2(file[0], 0);
 		close (file[0]);
 	}
