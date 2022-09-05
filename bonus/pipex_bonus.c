@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:51:59 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/03 21:40:36 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/05 14:11:05 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ static void	execute_child(char *cmd, char **envp, int fd_in, int fd_out)
 		path = get_path(cmd_args[0], path_env(envp));
 		dup2(fd_out, 1);
 		close (fd_out);
+		close (fd_in);
 		execve(path, cmd_args, envp);
 	}
 }
@@ -39,6 +40,7 @@ static void	heredoc_part(int argc, char **argv, char **envp, int *heredoc)
 {
 	char	*line;
 
+	//Maybe I have to assign heredoc array to each heredoc fd
 	parsing(argc, argv, envp, 4);
 	if (pipe(heredoc) == -1)
 		fatal_error("failed to create pipe\n");
@@ -68,6 +70,10 @@ void	iteration(t_data data, int *i, int *file, int *pipe_fd)
 	envp = data.envp;
 	if (*i == argc - 2)
 	{
+		if (data.append)
+			file[1] = open (data.outfile, O_RDWR | O_CREAT | O_APPEND, 0777);
+		else
+			file[1] = open (data.outfile, O_RDWR | O_CREAT | O_TRUNC, 0777);
 		if (file[1] == -1)
 			fatal_error(error_message("can't create :", argv[argc - 1]));
 		else
@@ -83,8 +89,8 @@ void	iteration(t_data data, int *i, int *file, int *pipe_fd)
 static void	pipex_bonus(int argc, char **argv, char **envp)
 {
 	int		pipe_fd[2];
-	int		heredoc[2];
 	int		file[2];
+	int		heredoc[2];
 	int		i;
 	t_data	data;
 
@@ -94,7 +100,7 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 		heredoc_part(argc, argv, envp, heredoc);
 	else
 		parsing(argc, argv, envp, 2);
-	files_init(argv[1], argv[argc - 1], file, data.append);
+	files_init(argv[1], file, data.append);
 	while (i <= argc - 2)
 	{
 		if (pipe(pipe_fd) == -1)
@@ -107,7 +113,7 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 	}
 	close_n_wait(file[1]);
 }
-
+//close outfile fd and fd 4
 /*simply executes pipex function*/
 int	main(int argc, char *argv[], char **envp)
 {

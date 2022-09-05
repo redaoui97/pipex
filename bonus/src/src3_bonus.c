@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/20 12:54:01 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/03 13:20:23 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/05 13:42:23 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	set_data(t_data *data, int argc, char **argv, char **envp)
 	data->argc = argc;
 	data->argv = argv;
 	data->envp = envp;
+	data->outfile = argv[argc - 1];
 	if (ft_strncmp(argv[1], "here_doc", 8) == 0)
 	{
 		data->first_command = 3;

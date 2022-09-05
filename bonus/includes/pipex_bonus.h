@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:50:09 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/04 18:40:51 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/05 13:41:22 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,7 @@ typedef struct s_data
 	int		append;
 	int		first_command;
 	int		argc;
-	int		**pipes;
-	int		**heredoc;
+	char	*outfile;
 	char	**argv;
 	char	**envp;
 }			t_data;
@@ -78,7 +77,7 @@ void	parsing(int argc, char **argv, char **envp, int start);
 char	*path_env(char **envp);
 char	*get_path(char *cmd, char *env_path);
 void	check_heredoc(char **argv, int *first_cmd, int *append);
-void	files_init(char	*infile, char *outfile, int	*file, int append);
+void	files_init(char	*infile, int	*file, int append);
 
 /*get_next_line functions*/
 char	*get_next_line(int fd);
