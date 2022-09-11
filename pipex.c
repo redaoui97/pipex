@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:51:59 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/03 11:09:10 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/11 09:48:40 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ static void	second_part(char **argv, char **envp, int *pipe_fd)
 	cmd_args = ft_split(argv[3], ' ');
 	path = get_path(cmd_args[0], path_env(envp));
 	outfile_fd = open (argv[4], O_RDWR | O_CREAT | O_TRUNC, 0777);
-	if (outfile_fd == -1)
+	if (outfile_fd == -1 && ft_strlen(argv[3]) != 0 && ft_strlen(argv[2]))
 	{
 		err = ft_strdup("no such file or directory: ");
 		err = ft_strjoin(err, argv[4]);

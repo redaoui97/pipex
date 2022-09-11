@@ -1,6 +1,9 @@
 check norminette 
 remove comments from makefile
 recheck headers
-check leaking fds 
-check if the pipes are closed in each iteration
-fix heredoc
+push:
+redo header
+checker leaks 
+check fd leaks in heredoc and normal infile and error infile
+more tests
+check norm 

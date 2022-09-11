@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/15 20:51:59 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/05 21:56:43 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/11 09:54:22 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,13 @@ static void	execute_child(char *cmd, char **envp, int fd_in, int fd_out)
 	char	*path;
 	char	**cmd_args;
 
-	if (fd_in < 0)
+	if (fd_in < 0 || ft_strlen(cmd) == 0)
 		return ;
 	pid = fork();
 	if (pid == -1)
 		fatal_error("failed to create a child process!");
 	if (pid == 0)
-	{
+	{		
 		cmd_args = ft_split(cmd, ' ');
 		path = get_path(cmd_args[0], path_env(envp));
 		dup2(fd_out, 1);
@@ -40,7 +40,6 @@ static void	heredoc_part(int argc, char **argv, char **envp, int *heredoc)
 {
 	char	*line;
 
-	//Maybe I have to assign heredoc array to each heredoc fd
 	if (pipe(heredoc) == -1)
 		fatal_error("failed to create pipe\n");
 	line = get_next_line(0);
@@ -75,14 +74,15 @@ void	iteration(t_data data, int *i, int *file, int *pipe_fd)
 		else
 			file[1] = open (data.outfile, O_RDWR | O_CREAT | O_TRUNC, 0777);
 		if (file[1] == -1)
-			fatal_error(error_message("can't create :", argv[argc - 1]));
-		else
+			fatal_error(error_message("no such file or directory :",
+				argv[argc - 1]));
+		if (file[1] != -1)
 			execute_child(argv[*i], envp, pipe_fd[0], file[1]);
 	}
 	if ((data.append == 0 && *i == 2) || (data.append && *i == 3))
 		execute_child(argv[*i], envp, file[0], pipe_fd[1]);
-	if ((!(data.append) && *i > 2 && *i < (argc - 2)) ||
-		(data.append && *i > 2 && *i < (argc -2)))
+	if ((!(data.append) && *i > 2 && *i < (argc - 2))
+		|| (data.append && *i > 2 && *i < (argc -2)))
 		execute_child(argv[*i], envp, pipe_fd[0], pipe_fd[1]);
 }
 
@@ -97,7 +97,7 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 
 	set_data(&data, argc, argv, envp);
 	i = data.first_command;
-	if (data.append)
+	if (data.append == 1)
 		heredoc_part(argc, argv, envp, heredoc);
 	else
 		parsing(argc, argv, envp, 2);
@@ -115,7 +115,7 @@ static void	pipex_bonus(int argc, char **argv, char **envp)
 	}
 	close_n_wait(file[1]);
 }
-//close outfile fd and fd 4
+
 /*simply executes pipex function*/
 int	main(int argc, char *argv[], char **envp)
 {

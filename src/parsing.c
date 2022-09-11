@@ -6,7 +6,7 @@
 /*   By: rnabil <rnabil@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/21 15:17:30 by rnabil            #+#    #+#             */
-/*   Updated: 2022/09/02 18:47:58 by rnabil           ###   ########.fr       */
+/*   Updated: 2022/09/11 09:48:47 by rnabil           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,10 @@ static void	parse_command(char *command, char **envp)
 	int		i;
 
 	if (ft_strlen(command) == 0)
-		error ("empty command\n");
+	{
+		error ("command not found : \n");
+		return ;
+	}
 	command_args = ft_split(command, ' ');
 	i = 0;
 	path = get_path(command_args[0], path_env(envp));
@@ -42,6 +45,8 @@ static void	parse_command(char *command, char **envp)
 /*was supposed to parse infile and outfile too but were handled in exec*/
 void	parsing(char **argv, char **envp)
 {
+	if (ft_strlen(argv[4]) == 0)
+		fatal_error("no such file or directory: ");
 	parse_command(argv[2], envp);
 	parse_command(argv[3], envp);
 }
